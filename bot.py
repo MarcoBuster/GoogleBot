@@ -91,7 +91,7 @@ def process_callback(bot, chains, update):
                      {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
                       'text': usr.getstr('trends'), 'parse_mode': 'HTML',
                       'reply_markup': '{"inline_keyboard": ['
-                                      '[{"text": "'+usr.getstr('back_button')+'", "callback_data": "home"}]]}'
+                                      '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
                       })
 
     news.process_callback(bot, chains, update)
@@ -123,13 +123,13 @@ def start(chat, message):
         'text': usr.getstr('start'), 'parse_mode': 'HTML',
         'reply_markup': '{"inline_keyboard": '
                         '[[{"text": "' + usr.getstr('news_button') + '", "callback_data": "news"},'
-                        '{"text": "'+usr.getstr('trends_button')+'", "callback_data": "trends"}],'
+                        '{"text": "' + usr.getstr('trends_button') + '", "callback_data": "trends"}],'
                         '[{"text": "' + usr.getstr('settings_button') + '", "callback_data": "settings"}]]}'
     })
 
 
 @bot.process_message
-def process_message(chat, message):
+def process_message(message):
     usr = user.User(message.sender)
 
     if message.text is None:

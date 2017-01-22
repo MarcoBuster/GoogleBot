@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.5"
+  # PyPy versions
+  - "pypy"
+  - "pypy"  # PyPy2 2.5.0
+  - "pypy3" # Pypy3 2.4.0
+  - "pypy-5.3.1"
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+before_install:
+    - pip install pep8
+
+script:
+    # Run pep8 on all .py files in all subfolders
+    # (I ignore "E402: module level import not at top of file"
+    # because of use case sys.path.append('..'); import <module>)
+    - find . -name \*.py -exec pep8 --ignore=E402 --ignore=E501 {} +

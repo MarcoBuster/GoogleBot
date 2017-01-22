@@ -1,0 +1,4 @@
+botogram
+beautifulsoup4
+feedparser
+pytrends

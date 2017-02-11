@@ -43,9 +43,9 @@ def process_callback(bot, chains, update):
                      {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
                       'text': usr.getstr('sign_in'), 'parse_mode': 'HTML',
                       'reply_markup': '{"inline_keyboard": '
-                                      '[[{"text": "'
-                                      + usr.getstr('sign_in_button') + '",'
-                                                                       ' "url": "' + oauth.get_url() + '"}]]}'
+                                      '[[{"text": '
+                                      '"' + usr.getstr('sign_in_button') + '",'
+                                                                           ' "url": "' + oauth.get_url() + '"}]]}'
                       })
         return
 
@@ -177,6 +177,7 @@ def process_message(message, chat):
 
         usr.state('home')
         return True
+
 
 if __name__ == '__main__':
     bot.run()

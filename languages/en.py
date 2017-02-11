@@ -6,14 +6,19 @@ LANGUAGE_CODE = 'en'  # Must respect this: https://en.wikipedia.org/wiki/List_of
 STRINGS = [
     {
         'start': '<b>Welcome in the bot!</b>\nYou are using <b>english translation</b>.',
+        'sign_in': '👤 <b>Sign in with Google</b>'
+                   '\nSign in with Google for use this bot',
+        'sign_in_button': '👤 Sign in with Google',
         'back_button': '🔙 Return back',
         'news_button': '📰 News',
         'settings_button': '⚙ Settings',
         'settings': 'What setting do you want to change?',
         'trends_button': '📊 Trends',
         'trends': '🔍 Insert an <b>argument</b> that you would to view the 📊  <b>stats</b>',
+        'trends_not_found': '❌ <b>No results</b>\nTry to search more general things',
         'generating_graph': '🔄 <b>I\'m generating the graph...</b>',
         'generated_graph': '✅ <b>Graph generated successfully.</b>',
+        'calendar_button': '📅 Calendar',
         'setlan_button': '⚙ Change language',
         'setlan': '<b>Select new language</b>'
     }

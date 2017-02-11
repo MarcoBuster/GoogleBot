@@ -1,9 +1,12 @@
 import sqlite3
 from languages import it, en
+import os
+from oauth2client.file import Storage
 
 conn = sqlite3.connect('users.db')
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY NOT NULL, state STRING, language STRING)')
+conn.commit()
 
 
 class User:
@@ -14,13 +17,17 @@ class User:
         self.id = user.id
         self.name = user.name
         self.username = user.username
-        if language is None and state is None:
-            c.execute('INSERT OR IGNORE INTO users VALUES(?, ?, ?)', (self.id, state, language,))
+        if language is not None:
+            c.execute('UPDATE OR IGNORE users SET language=? WHERE id=?', (language, self.id,))
+            conn.commit()
+            return
+
+        if state is not None:
+            c.execute('UPDATE OR IGNORE users SET state=? WHERE id=?', (state, self.id,))
             conn.commit()
             return
 
         c.execute('INSERT OR IGNORE INTO users VALUES(?, ?, ?)', (self.id, state, language,))
-        c.execute('UPDATE OR IGNORE users SET language=?, state=? WHERE id=?', (language, state, self.id,))
         conn.commit()
 
     @property
@@ -62,3 +69,23 @@ class User:
             return it.get(str_code)
         if lang == 'en':
             return en.get(str_code)
+
+    @property
+    def logged_in(self):
+        try:
+            if not os.getcwd().endswith('/oauth/credentials'):
+                os.chdir(os.getcwd() + '/oauth/credentials')
+            print(os.getcwd())
+
+            storage = Storage('{id}.json'.format(id=self.id))
+            if storage.get() is None:
+                return False
+            else:
+                return True
+        except:
+            return False
+
+    def credentials(self):
+        os.chdir(os.getcwd() + '/oauth/credentials')
+        storage = Storage('{id}.json'.format(id=self.id))
+        return storage.get()

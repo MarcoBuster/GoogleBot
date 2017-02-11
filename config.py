@@ -2,5 +2,10 @@ TOKEN = ''
 
 GOOGLE_USERNAME = ''
 GOOGLE_PASSWORD = ''
+
 PLOTLY_USERNAME = ''
 PLOTLY_API_KEY = ''
+
+GOOGLE_OAUTH_CLIENT_ID = ''
+GOOGLE_OAUTH_CLIENT_SECRET = ''
+GOOGLE_OAUTH_REDIRECT_URI = 'https://callback.marcoaceti.it/google_oauth'

@@ -2,3 +2,6 @@ botogram
 beautifulsoup4
 feedparser
 pytrends
+flask
+plotly
+oauth2client

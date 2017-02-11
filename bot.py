@@ -6,6 +6,8 @@ from config import *
 from objects import callback, user
 from plugins import news, trends
 
+from oauth import oauth
+
 
 class CallbackQuery(botogram.objects.base.BaseObject):
     required = {
@@ -33,16 +35,23 @@ def process_callback(bot, chains, update):
 
     if 'l@' in cb.query:
         usr.language(new_language=cb.query.replace('l@', ''))
+        if usr.logged_in:
+            cb.query = 'home'
+
+    if not usr.logged_in and usr.exists:
         bot.api.call('editMessageText',
                      {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': usr.getstr('start'), 'parse_mode': 'HTML',
+                      'text': usr.getstr('sign_in'), 'parse_mode': 'HTML',
                       'reply_markup': '{"inline_keyboard": '
-                                      '[[{"text": "' + usr.getstr('news_button') + '", "callback_data": "news"},'
-                                                                                   '{"text": "' + usr.getstr(
-                          'trends_button') + '", "callback_data": "trends"}],'
-                                             '[{"text": "' + usr.getstr(
-                          'settings_button') + '", "callback_data": "settings"}]]}'
+                                      '[[{"text": "'
+                                      + usr.getstr('sign_in_button') + '",'
+                                                                       ' "url": "' + oauth.get_url() + '"}]]}'
                       })
+        return
+
+    if cb.query == 'sign_in':
+        bot.api.call("answerCallbackQuery",
+                     {'callback_query_id': cb.id, 'url': 'telegram.me/your_bot?start=XXXX'})
 
     if not usr.exists:
         text = (
@@ -64,10 +73,13 @@ def process_callback(bot, chains, update):
                       'reply_markup': '{"inline_keyboard": '
                                       '[[{"text": "' + usr.getstr('news_button') + '", "callback_data": "news"},'
                                                                                    '{"text": "' + usr.getstr(
-                          'trends_button') + '", "callback_data": "trends"}],'
-                                             '[{"text": "' + usr.getstr(
+                          'trends_button') + '", "callback_data": "trends"},'
+                                             '{"text": "' + usr.getstr(
+                          'calendar_button') + '", "callback_data": "calendar"}],'
+                                               '[{"text": "' + usr.getstr(
                           'settings_button') + '", "callback_data": "settings"}]]}'
                       })
+
     elif cb.query == 'settings':
         bot.api.call('editMessageText',
                      {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
@@ -101,9 +113,13 @@ bot.register_update_processor("callback_query", process_callback)
 
 
 @bot.command("start")
-def start(chat, message):
+def start(chat, message, args):
     usr = user.User(message.sender)
     usr.state('home')
+
+    if 'oauth@' in ''.join(args):
+        print(''.join(args).replace('oauth@', ''))
+        print(oauth.save(usr, ''.join(args).replace('oauth@', '')))
 
     if not usr.exists:
         text = (
@@ -123,13 +139,17 @@ def start(chat, message):
         'text': usr.getstr('start'), 'parse_mode': 'HTML',
         'reply_markup': '{"inline_keyboard": '
                         '[[{"text": "' + usr.getstr('news_button') + '", "callback_data": "news"},'
-                        '{"text": "' + usr.getstr('trends_button') + '", "callback_data": "trends"}],'
-                        '[{"text": "' + usr.getstr('settings_button') + '", "callback_data": "settings"}]]}'
+                                                                     '{"text": "' + usr.getstr(
+            'trends_button') + '", "callback_data": "trends"},'
+                               '{"text": "' + usr.getstr('calendar_button') + '", "callback_data": "calendar"}],'
+                                                                              '[{"text": "' + usr.getstr(
+            'settings_button') + '", "callback_data": "settings"}]]}'
     })
 
 
 @bot.process_message
-def process_message(message):
+def process_message(message, chat):
+    print('test')
     usr = user.User(message.sender)
 
     if message.text is None:
@@ -141,9 +161,22 @@ def process_message(message):
     elif usr.state() == 'trends1':
         msg = message.reply(usr.getstr('generating_graph'))
         file = trends.graph(message.text)
+        if not file:
+            bot.api.call('editMessageText', {
+                'chat_id': chat.id, 'message_id': msg.message_id,
+                'text': usr.getstr('trends_not_found'), 'parse_mode': 'HTML',
+                'reply_markup': '{"inline_keyboard": ['
+                                '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
+            })
+            usr.state('home')
+            return True
+
         message.reply_with_photo(file)
         os.remove(file)  # Disk space is sacred
         msg.edit(usr.getstr('generated_graph'))
+
+        usr.state('home')
+        return True
 
 if __name__ == '__main__':
     bot.run()

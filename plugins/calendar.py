@@ -40,7 +40,7 @@ def formatevents(user, result):
 
         text += (
             '\n🔸 <b>{title}</b> • {by} {creator} • {date} {location} {description}\n'.format(
-                title=event.get('summary', user.getstr()), by=user.getstr('event_by'), creator=creator,
+                title=event.get('summary', user.getstr('no_title')), by=user.getstr('event_by'), creator=creator,
                 date=date, location=location, description=description
             )
         )

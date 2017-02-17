@@ -30,6 +30,7 @@ STRINGS = [
         'your_self': 'yourself',
         'start_event_time': 'from hour {hour} of day {date}',
         'end_event_time': 'to hour {hour} of day {date}',
+        'no_title': '<i>No title</i>',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',

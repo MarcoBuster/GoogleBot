@@ -4,7 +4,7 @@ import os
 
 from config import *
 from objects import callback, user
-from plugins import news, trends
+from plugins import news, trends, calendar
 
 from oauth import oauth
 
@@ -106,7 +106,16 @@ def process_callback(bot, chains, update):
                                       '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
                       })
 
+    elif cb.query == 'calendar':
+        text, inline_keyboard = calendar.getevents(usr, [None, 3])
+        bot.api.call('editMessageText',
+                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
+                      'text': text, 'parse_mode': 'HTML',
+                      'reply_markup': inline_keyboard
+                      })
+
     news.process_callback(bot, chains, update)
+    calendar.process_callback(bot, chains, update)
 
 
 bot.register_update_processor("callback_query", process_callback)

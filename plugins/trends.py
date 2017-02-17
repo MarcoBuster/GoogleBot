@@ -44,7 +44,7 @@ def graph(argument, country=None):
                   xaxis=dict(title='Date'),
                   yaxis=dict(title='Trend (100% is max peak)'),)
 
-    filename = os.getcwd() + "/trend@{x}.png".format(x=''.join(random.choice(string.ascii_uppercase) for _ in range(9)))
+    filename = os.path.dirname(os.path.realpath(__file__)) + "/trend@{x}.png".format(x=''.join(random.choice(string.ascii_uppercase) for _ in range(9)))
     fig = dict(data=[line], layout=layout)
     py.image.save_as(fig, filename=filename)
     return filename

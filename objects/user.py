@@ -73,9 +73,7 @@ class User:
     @property
     def logged_in(self):
         try:
-            if not os.getcwd().endswith('/oauth/credentials'):
-                os.chdir(os.getcwd() + '/oauth/credentials')
-            print(os.getcwd())
+            os.chdir(os.path.dirname(os.path.realpath(__file__)).replace('/objects', '') + '/oauth/credentials')
 
             storage = Storage('{id}.json'.format(id=self.id))
             if storage.get() is None:
@@ -86,6 +84,6 @@ class User:
             return False
 
     def credentials(self):
-        os.chdir(os.getcwd() + '/oauth/credentials')
+        os.chdir(os.path.dirname(os.path.realpath(__file__)).replace('/objects', '') + '/oauth/credentials')
         storage = Storage('{id}.json'.format(id=self.id))
         return storage.get()

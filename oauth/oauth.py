@@ -3,7 +3,9 @@ from oauth2client.file import Storage
 import os
 from config import *
 
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+SCOPES = ['https://www.googleapis.com/auth/calendar',
+          'https://www.googleapis.com/auth/drive',
+          'profile']
 
 flow = OAuth2WebServerFlow(client_id=GOOGLE_OAUTH_CLIENT_ID,
                            client_secret=GOOGLE_OAUTH_CLIENT_SECRET,
@@ -25,8 +27,7 @@ def save(usr, code):
         print(str(e))
         return False
 
-    if not os.getcwd().endswith('/oauth/credentials'):
-        os.chdir(os.getcwd() + '/oauth/credentials')
+    os.chdir(os.path.dirname(os.path.realpath(__file__)).replace('/oauth', '') + '/oauth/credentials')
 
     file_name = '{id}.json'.format(id=usr.id)
     open(file_name, 'a').close()

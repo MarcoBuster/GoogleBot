@@ -3,6 +3,8 @@ AUTHOR_HREF = 'https://www.github.com/MarcoBuster/'
 LANGUAGE = 'English'  # Must be in english
 LANGUAGE_CODE = 'en'  # Must respect this: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 
+# TODO: Reorder strings
+
 STRINGS = [
     {
         'start': '<b>Welcome in the bot!</b>\nYou are using <b>english translation</b>.',
@@ -20,7 +22,18 @@ STRINGS = [
         'generated_graph': '✅ <b>Graph generated successfully.</b>',
         'calendar_button': '📅 Calendar',
         'setlan_button': '⚙ Change language',
-        'setlan': '<b>Select new language</b>'
+        'setlan': '<b>Select new language</b>',
+        # -- Calendar plugin strings --
+        # Events list
+        'header': '📅 <b>All events in your calendar</b>',
+        'event_by': 'created by',
+        'your_self': 'yourself',
+        'start_event_time': 'from hour {hour} of day {date}',
+        'end_event_time': 'to hour {hour} of day {date}',
+        # -- Buttons --
+        # Controls
+        'first_page': '⏪ First page',
+        'next_page': '▶️ Next page'
     }
 ]
 

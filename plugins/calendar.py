@@ -23,8 +23,8 @@ def formatevents(user, result):
         start = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S+%f:00')
         end = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S+%f:00')
         date = (
-            user.getstr('start_event_time').format(hour=start.strftime('%H:%M'), date=start.strftime('%d/%m/%y'))
-            + ' ' + user.getstr('end_event_time').format(hour=end.strftime('%H:%M'), date=end.strftime('%d/%m/%y')))
+            user.getstr('start_event_time').format(hour=start.strftime('%H:%M'), date=start.strftime('%d/%m/%y')) +
+            ' ' + user.getstr('end_event_time').format(hour=end.strftime('%H:%M'), date=end.strftime('%d/%m/%y')))
 
         location, description = '', ''
         creator = event.get('creator').get('displayName')

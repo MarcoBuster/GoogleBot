@@ -127,8 +127,7 @@ def start(chat, message, args):
     usr.state('home')
 
     if 'oauth@' in ''.join(args):
-        print(''.join(args).replace('oauth@', ''))
-        print(oauth.save(usr, ''.join(args).replace('oauth@', '')))
+        oauth.save(usr, ''.join(args).replace('oauth@', ''))
 
     if not usr.exists:
         text = (
@@ -158,7 +157,6 @@ def start(chat, message, args):
 
 @bot.process_message
 def process_message(message, chat):
-    print('test')
     usr = user.User(message.sender)
 
     if message.text is None:

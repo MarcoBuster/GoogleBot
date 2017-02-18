@@ -80,13 +80,11 @@ def getevents(user, elements_range):
     inline_keyboard = '{"inline_keyboard": ' \
                       '[' + br1 + firstpage + (',' if firstpage != '' and nextpage != '' else '') + nextpage \
                       + br2 + '[{"text": "' + user.getstr('back_button') + '", "callback_data": "home"}]]}'
-    print(inline_keyboard)
     return text, inline_keyboard
 
 
 def process_callback(bot, chains, update):
     cb = callback.Callback(update)
-    print(cb.query)
     user = _user.User(cb.sender)
 
     if 'cd@' in cb.query:

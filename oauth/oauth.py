@@ -23,8 +23,7 @@ def get_url():
 def save(usr, code):
     try:
         credentials = flow.step2_exchange(code)
-    except FlowExchangeError as e:
-        print(str(e))
+    except FlowExchangeError:
         return False
 
     os.chdir(os.path.dirname(os.path.realpath(__file__)).replace('/oauth', '') + '/oauth/credentials')

@@ -28,9 +28,11 @@ STRINGS = [
         'header': '📅 <b>All events in your calendar</b>',
         'event_by': 'created by',
         'your_self': 'yourself',
+        'no_title': 'No title',
         'start_event_time': 'from hour {hour} of day {date}',
         'end_event_time': 'to hour {hour} of day {date}',
-        'no_title': '<i>No title</i>',
+        'all_day_time': 'all day {day}',
+        'no_events': '📅 <b>There aren\'t events on your calendar</b>',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',

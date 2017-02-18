@@ -19,12 +19,19 @@ def formatevents(user, result):
     events = result.get('items', [])
 
     text = user.getstr('header')
+    events_number = 0
     for event in events:
-        start = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S+%f:00')
-        end = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S+%f:00')
-        date = (
-            user.getstr('start_event_time').format(hour=start.strftime('%H:%M'), date=start.strftime('%d/%m/%y')) +
-            ' ' + user.getstr('end_event_time').format(hour=end.strftime('%H:%M'), date=end.strftime('%d/%m/%y')))
+        events_number += 1
+
+        if event['start'].get('date') is not None:
+            day = datetime.strptime(event['start'].get('date'), '%Y-%m-%d').strftime('%d/%m/%y')
+            date = user.getstr('all_day_time').format(day=day)
+        else:
+            start = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S+%f:00')
+            end = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S+%f:00')
+            date = (
+                user.getstr('start_event_time').format(hour=start.strftime('%H:%M'), date=start.strftime('%d/%m/%y')) +
+                ' ' + user.getstr('end_event_time').format(hour=end.strftime('%H:%M'), date=end.strftime('%d/%m/%y')))
 
         location, description = '', ''
         creator = event.get('creator').get('displayName')
@@ -45,6 +52,10 @@ def formatevents(user, result):
             )
         )
         del event  # Temporary fix for dict.get() bug (or feature?)
+
+    if events_number == 0:
+        return user.getstr('no_events')
+
     return text
 
 

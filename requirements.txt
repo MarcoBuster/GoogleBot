@@ -1,7 +1,7 @@
 botogram
 beautifulsoup4
 feedparser
-pytrends
+pytrends==3.0.0
 flask
 plotly
 oauth2client

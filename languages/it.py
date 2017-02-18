@@ -33,10 +33,32 @@ STRINGS = [
         'end_event_time': 'alle ore {hour} del giorno {date}',
         'all_day_time': 'tutto il giorno {day}',
         'no_events': '📅 <b>Non ci sono eventi sul tuo calendario</b>',
+        # Create event
+        'create_event_header': '📅  <b>Creazione di un evento</b>\n',
+        'create_event_notext_error': '❌ Il messaggio <b>non contiene testo</b>\nPer favore, <b>riprova</b>',
+        'create_event_timeformatting_error': '❌ <b>Errore nella formattazione dell\'orario</b>'
+                                             '\nRicorda che il formato è: <code>ora:minuto giorno/mese/anno</code>'
+                                             ' - <code>ora:minuto giorno/mese/anno</code>',
+        'create_event_first_step': '1️⃣ <i>Inserisci il nome dell\'evento</i>'
+                                   '\nSe vuoi aggiungere una <b>descrizione</b>, aggiungi alla fine'
+                                   ' un punto <code>.</code>'
+                                   ' seguito dalla tua descrizione, per esempio:'
+                                   '\n<code>Cena con Clara. Ricordati di comprare i cioccolatini!</code>',
+        'create_event_second_step': '2️⃣ <i>Inserisci l\'ora di inizio e di fine del tuo evento</i>'
+                                    '\nScrivi la <b>data di inizio</b> e <b>di fine</b> del tuo evento'
+                                    ' in questo formato: <code>ora:minuto giorno/mese/anno</code>,'
+                                    ' mettendoci un trattino <code>-</code> in mezzo, per esempio:'
+                                    '\n<code>12:30 22/02/2017 - 13:10 22/02/2017</code>',
+        'create_event_completed': '🆗 <i>Fatto!</i>'
+                                  '\n<b>Nome dell\'evento</b>: {name}'
+                                  '{description}'
+                                  '\n<a href="{url}">Clicca qui per visualizzare l\'evento su Calendari Google</a>',
+        'create_event_completed_description': '\n<b>Descrizione</b>: {description}',
         # -- Buttons --
         # Controls
         'first_page': '⏪ Prima pagina',
-        'next_page': '▶️ Prossima pagina'
+        'next_page': '▶️ Prossima pagina',
+        'add_event_button': '➕ Aggiungi un evento'
     }
 ]
 

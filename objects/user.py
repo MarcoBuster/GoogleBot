@@ -6,6 +6,8 @@ from oauth2client.file import Storage
 conn = sqlite3.connect('users.db')
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY NOT NULL, state STRING, language STRING)')
+c.execute('CREATE TABLE IF NOT EXISTS calendar_create_event'
+          '(id INTEGER NOT NULL, summary STRING, description STRING)')  # Only for caching messages
 conn.commit()
 
 

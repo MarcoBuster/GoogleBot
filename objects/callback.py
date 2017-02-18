@@ -1,10 +1,4 @@
-import sqlite3
-
-
 class Callback:
-    conn = sqlite3.connect('users.db')
-    c = conn.cursor()
-
     def __init__(self, update):
         self.update = update.callback_query
         self.id = self.update.id

@@ -33,10 +33,32 @@ STRINGS = [
         'end_event_time': 'to hour {hour} of day {date}',
         'all_day_time': 'all day {day}',
         'no_events': '📅 <b>There aren\'t events on your calendar</b>',
+        # Create event
+        'create_event_header': '📅  <b>Event creation</b>\n',
+        'create_event_notext_error': '❌ The message <b>doesn\'t contain any text.</b>\nPlease, <b>try again.</b>',
+        'create_event_timeformatting_error': '❌ <b>Error in the time\'s format</b>'
+                                             '\nThe correct format is: <code>hh:mm dd/mm/yyy</code>'
+                                             ' - <code>hh:mm dd/mm/yyyy</code>',
+        'create_event_first_step': '1️⃣ <i>Insert the event\'s name</i>'
+                                   '\nIf you want to add a <b>description</b>, add a dot'
+                                   ' <code>.</code> at the end of the name,'
+                                   ' followed by the description, for example:'
+                                   '\n<code>Dinner with Clara. Remember to buy chocolates!</code>',
+        'create_event_second_step': '2️⃣ <i>Enter the starting and ending time of your event</i>'
+                                    '\nWrite the <b>starting</b> and <b>ending dates</b> of your event'
+                                    ' in this format: <code>hh:mm dd/mm/yyyy</code>.'
+                                    ' Put a dash <code>-</code> between the two, for example:'
+                                    '\n<code>12:30 22/02/2017 - 13:10 22/02/2017</code>',
+        'create_event_completed': '🆗 <i>Done!</i>'
+                                  '\n<b>Event\'s name</b>: {name}'
+                                  '{description}'
+                                  '\n<a href="{url}">Click here to view the event on Google Calendar.</a>',
+        'create_event_completed_description': '\n<b>Description</b>: {description}',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',
-        'next_page': '▶️ Next page'
+        'next_page': '▶️ Next page',
+        'add_event_button': '➕ Add an event'
     }
 ]
 

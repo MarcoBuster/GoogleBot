@@ -1,12 +1,18 @@
-import httplib2
 from apiclient import discovery
+import httplib2
 
 from datetime import datetime
 from objects import callback
 from objects import user as _user
 
-import logging
-logger = logging.getLogger('testtt')
+import sqlite3
+conn = sqlite3.connect('users.db')
+c = conn.cursor()
+
+
+def build_rfc3339_phrase(datetime_obj):
+    datetime_phrase = datetime_obj.strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+    return datetime_phrase
 
 
 def login(user):
@@ -60,18 +66,13 @@ def formatevents(user, result):
 
 
 def getevents(user, elements_range):
-    logger.info('Funzione getEvents richiamata')
     service = login(user)
-    logger.info('logged innn')
-
     command = service.events().list(
         calendarId='primary', timeMin=datetime.utcnow().isoformat() + 'Z',
         maxResults=elements_range[1], singleEvents=True, orderBy='startTime', pageToken=elements_range[0]
     )
     result = command.execute()
-    logger.info('commanddo eseguito badrone')
     text = formatevents(user, result)
-    logger.info('risposta formattata +++')
     pagetoken = result.get('nextPageToken', None)
 
     if elements_range[0] is not None:
@@ -90,7 +91,8 @@ def getevents(user, elements_range):
 
     inline_keyboard = '{"inline_keyboard": ' \
                       '[' + br1 + firstpage + (',' if firstpage != '' and nextpage != '' else '') + nextpage \
-                      + br2 + '[{"text": "' + user.getstr('back_button') + '", "callback_data": "home"}]]}'
+                      + br2 + '[{"text": "' + user.getstr('add_event_button') + '", "callback_data": "cd@add"}],' +\
+                      '[{"text": "' + user.getstr('back_button') + '", "callback_data": "home"}]]}'
     return text, inline_keyboard
 
 
@@ -112,3 +114,113 @@ def process_callback(bot, chains, update):
                           'text': text, 'parse_mode': 'HTML',
                           'reply_markup': inline_keyboard
                           })
+
+        if 'cd@add' in cb.query:
+            bot.api.call('editMessageText', {
+                'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'parse_mode': 'HTML',
+                'text': user.getstr('create_event_header') + user.getstr('create_event_first_step'), 'reply_markup':
+                '{"inline_keyboard": [[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+            })
+            user.state('calendar_create_event_1')
+
+
+def process_message(update):
+    message = update.message
+    chat = update.chat
+    user = update.user
+    bot = update.bot
+
+    if message.text is None:
+        if user.state() == 'calendar_create_event_1':
+            bot.api.call('sendMessage', {
+                'chat_id': chat.id, 'parse_mode': 'HTML',
+                'text': user.getstr('create_event_header') + user.getstr('create_event_notext_error'), 'reply_markup':
+                '{"inline_keyboard": [[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+            })
+
+    if user.state() == 'calendar_create_event_1':
+        c.execute('DELETE FROM calendar_create_event WHERE id=?', (user.id,))
+        conn.commit()
+
+        if '.' in message.text:
+            summary = message.text.split('.')[0].lstrip().rstrip()
+            description = message.text.split('.')[1].lstrip().rstrip()
+        else:
+            summary = message.text.lstrip().rstrip()
+            description = None
+
+        c.execute('INSERT INTO calendar_create_event VALUES(?, ?, ?)', (user.id, summary, description,))
+        conn.commit()
+        user.state('calendar_create_event_2')
+
+        bot.api.call('sendMessage', {
+            'chat_id': chat.id, 'parse_mode': 'HTML',
+            'text': user.getstr('create_event_header') + user.getstr('create_event_second_step'), 'reply_markup':
+                '{"inline_keyboard": [[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+        })
+
+    elif user.state() == 'calendar_create_event_2':
+        if message.text is None:
+            if user.state() == 'calendar_create_event_1':
+                bot.api.call('sendMessage', {
+                    'chat_id': chat.id, 'parse_mode': 'HTML',
+                    'text': user.getstr('create_event_header') + user.getstr('create_event_notext_error'),
+                    'reply_markup':
+                        '{"inline_keyboard": [[{"text": "' + user.getstr(
+                            'back_button') + '", "callback_data": "calendar"}]]}'
+                })
+
+        try:
+            start = message.text.split('-')[0].lstrip().rstrip()
+            end = message.text.split('-')[1].lstrip().rstrip()
+
+            start = build_rfc3339_phrase(datetime.strptime(start, '%H:%M %d/%m/%Y'))
+            end = build_rfc3339_phrase(datetime.strptime(end, '%H:%M %d/%m/%Y'))
+        except IndexError:
+            bot.api.call('sendMessage', {
+                'chat_id': chat.id, 'parse_mode': 'HTML',
+                'text': user.getstr('create_event_header') + user.getstr('create_event_timeformatting_error'),
+                'reply_markup':
+                    '{"inline_keyboard": [[{"text": "' + user.getstr(
+                        'back_button') + '", "callback_data": "calendar"}]]}'
+            })
+            return
+        except ValueError:
+            bot.api.call('sendMessage', {
+                'chat_id': chat.id, 'parse_mode': 'HTML',
+                'text': user.getstr('create_event_header') + user.getstr('create_event_timeformatting_error'),
+                'reply_markup':
+                    '{"inline_keyboard": [[{"text": "' + user.getstr(
+                        'back_button') + '", "callback_data": "calendar"}]]}'
+            })
+            return
+
+        c.execute('SELECT * FROM calendar_create_event WHERE id=?', (user.id,))
+        row = c.fetchone()
+        summary = row[1]
+        description = row[2]
+
+        service = login(user)
+        event = {
+            'summary': summary,
+            'description': description,
+            'start': {
+                'dateTime': start,
+            },
+            'end': {
+                'dateTime': end,
+            },
+            'reminders': {
+                'useDefault': True,
+            },
+        }
+        event = service.events().insert(calendarId='primary', body=event).execute()
+        c.execute('DELETE FROM calendar_create_event WHERE id=?', (user.id,))
+        conn.commit()
+
+        text = user.getstr('create_event_completed').format(name=summary, url=event.get('htmlLink'),
+                                                            description=(
+                                                                user.getstr('create_event_completed_description')
+                                                                .format(description=description)
+                                                                if description is not None else ''))
+        message.reply(text)

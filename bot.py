@@ -3,7 +3,7 @@ import botogram
 import os
 
 from config import *
-from objects import callback, user
+from objects import callback, user, message_update
 from plugins import news, trends, calendar
 
 from oauth import oauth
@@ -159,32 +159,9 @@ def start(chat, message, args):
 def process_message(message, chat):
     usr = user.User(message.sender)
 
-    if message.text is None:
-        return True
-
-    if usr.state() == 'home':
-        return True
-
-    elif usr.state() == 'trends1':
-        msg = message.reply(usr.getstr('generating_graph'))
-        file = trends.graph(message.text)
-        if not file:
-            bot.api.call('editMessageText', {
-                'chat_id': chat.id, 'message_id': msg.message_id,
-                'text': usr.getstr('trends_not_found'), 'parse_mode': 'HTML',
-                'reply_markup': '{"inline_keyboard": ['
-                                '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
-            })
-            usr.state('home')
-            return True
-
-        message.reply_with_photo(file)
-        os.remove(file)  # Disk space is sacred
-        msg.edit(usr.getstr('generated_graph'))
-
-        usr.state('home')
-        return True
-
+    update = message_update.MessageUpdate(usr, bot, chat, message)
+    trends.process_message(update)
+    calendar.process_message(update)
 
 if __name__ == '__main__':
     bot.run()

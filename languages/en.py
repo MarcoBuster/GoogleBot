@@ -7,32 +7,32 @@ LANGUAGE_CODE = 'en'  # Must respect this: https://en.wikipedia.org/wiki/List_of
 
 STRINGS = [
     {
-        'start': '<b>Welcome in the bot!</b>\nYou are using <b>english translation</b>.',
+        'start': '<b>Welcome to the bot!</b>\nYou are using the <b>english translation</b>.',
         'sign_in': '👤 <b>Sign in with Google</b>'
-                   '\nSign in with Google for use this bot',
+                   '\nSign in with Google to use this bot',
         'sign_in_button': '👤 Sign in with Google',
-        'back_button': '🔙 Return back',
+        'back_button': '🔙 Go back',
         'news_button': '📰 News',
         'settings_button': '⚙ Settings',
-        'settings': 'What setting do you want to change?',
+        'settings': 'What setting would you like to change?',
         'trends_button': '📊 Trends',
-        'trends': '🔍 Insert an <b>argument</b> that you would to view the 📊  <b>stats</b>',
-        'trends_not_found': '❌ <b>No results</b>\nTry to search more general things',
+        'trends': '🔍 Insert a <b>query</b> you would to view the 📊  <b>stats</b> for',
+        'trends_not_found': '❌ <b>No results</b>\nTry searching more general things',
         'generating_graph': '🔄 <b>I\'m generating the graph...</b>',
         'generated_graph': '✅ <b>Graph generated successfully.</b>',
         'calendar_button': '📅 Calendar',
         'setlan_button': '⚙ Change language',
-        'setlan': '<b>Select new language</b>',
+        'setlan': '<b>Select your language</b>',
         # -- Calendar plugin strings --
         # Events list
-        'header': '📅 <b>All events in your calendar</b>',
+        'header': '📅 <b>All the events in your calendar</b>',
         'event_by': 'created by',
         'your_self': 'yourself',
         'no_title': 'No title',
         'start_event_time': 'from hour {hour} of day {date}',
         'end_event_time': 'to hour {hour} of day {date}',
         'all_day_time': 'all day {day}',
-        'no_events': '📅 <b>There aren\'t events on your calendar</b>',
+        'no_events': '📅 <b>There aren\'t any events on your calendar</b>',
         # Create event
         'create_event_header': '📅  <b>Event creation</b>\n',
         'create_event_notext_error': '❌ The message <b>doesn\'t contain any text.</b>\nPlease, <b>try again.</b>',
@@ -54,35 +54,35 @@ STRINGS = [
                                   '{description}'
                                   '\n<a href="{url}">Click here to view the event on Google Calendar.</a>',
         'create_event_completed_description': '\n<b>Description</b>: {description}',
-        # Update event  TODO: Find a traslator and traslate this
+        # Update event
         'update_event': 'edit',
-        'update_event_header': '📅  <b>Modifica di un evento</b>\n',
-        'update_event_first_step': '1️⃣ <i>Inserisci il nuovo nome dell\'evento</i>'
-                                   '\nSe vuoi aggiungere una <b>descrizione</b>, aggiungi alla fine'
-                                   ' un punto <code>.</code>'
-                                   ' seguito dalla tua descrizione, per esempio:'
-                                   '\n<code>Cena con Clara. Ricordati di comprare i cioccolatini!</code>',
-        'update_event_second_step': '2️⃣ <i>Inserisci la nuova ora di inizio e di fine del tuo evento</i>'
-                                    '\nScrivi la <b>data di inizio</b> e <b>di fine</b> del tuo evento'
-                                    ' in questo formato: <code>ora:minuto giorno/mese/anno</code>,'
-                                    ' mettendoci un trattino <code>-</code> in mezzo, per esempio:'
+        'update_event_header': '📅  <b>Edit an event</b>\n',
+        'update_event_first_step': '1️⃣ <i>Insert the event\'s new name</i>'
+                                   '\nIf you want to add a <b>description</b>, add a dot'
+                                   ' <code>.</code> at the end of the name,'
+                                   ' followed by the description, for example:'
+                                   '\n<code>Dinner with Clara. Remember to buy chocolates!</code>',
+        'update_event_second_step': '2️⃣ <i>Enter the new starting and ending time of your event</i>'
+                                    '\nWrite the <b>starting</b> and <b>ending dates</b> of your event'
+                                    ' in this format: <code>hh:mm dd/mm/yyyy</code>.'
+                                    ' Put a dash <code>-</code> between the two, for example:'
                                     '\n<code>12:30 22/02/2017 - 13:10 22/02/2017</code>',
-        'update_event_completed': '🆗 <i>Fatto!</i>'
-                                  '\n<b>Nome dell\'evento</b>: {name}'
+        'update_event_completed': '🆗 <i>Done!</i>'
+                                  '\n<b>Event\'s name</b>: {name}'
                                   '{description}'
-                                  '\n<a href="{url}">Clicca qui per visualizzare l\'evento su Calendari Google</a>',
-        'update_event_completed_description': '\n<b>Descrizione</b>: {description}',
+                                  '\n<a href="{url}">Click here to view the event on Google Calendar.</a>',
+        'update_event_completed_description': '\n<b>Description</b>: {description}',
         # Delete
-        'deleted_event': '🗑 <b>Il tuo evento è stato eliminato con successo</b>',
+        'deleted_event': '🗑 <b>Your event has been deleted.</b>',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',
         'next_page': '▶️ Next page',
         # Calendar
         'add_event_button': '➕ Add an event',
-        'edit_event_button': '✍️ Modifica',
-        'delete_event_button': '🗑 Elimina',
-        'update_event_same': '🙈 Lascia così'
+        'edit_event_button': '✍️ Edit',
+        'delete_event_button': '🗑 Delete',
+        'update_event_same': '🙈 Keep like this'
     }
 ]
 

@@ -54,11 +54,33 @@ STRINGS = [
                                   '{description}'
                                   '\n<a href="{url}">Clicca qui per visualizzare l\'evento su Calendari Google</a>',
         'create_event_completed_description': '\n<b>Descrizione</b>: {description}',
+        # Update event
+        'update_event': 'modifica',
+        'update_event_header': '📅  <b>Modifica di un evento</b>\n',
+        'update_event_first_step': '1️⃣ <i>Inserisci il nuovo nome dell\'evento</i>'
+                                   '\nSe vuoi aggiungere una <b>descrizione</b>, aggiungi alla fine'
+                                   ' un punto <code>.</code>'
+                                   ' seguito dalla tua descrizione, per esempio:'
+                                    '\n<code>Cena con Clara. Ricordati di comprare i cioccolatini!</code>',
+        'update_event_second_step': '2️⃣ <i>Inserisci la nuova ora di inizio e di fine del tuo evento</i>'
+                                    '\nScrivi la <b>data di inizio</b> e <b>di fine</b> del tuo evento'
+                                    ' in questo formato: <code>ora:minuto giorno/mese/anno</code>,'
+                                    ' mettendoci un trattino <code>-</code> in mezzo, per esempio:'
+                                    '\n<code>12:30 22/02/2017 - 13:10 22/02/2017</code>',
+        'update_event_completed': '🆗 <i>Fatto!</i>'
+                                  '\n<b>Nome dell\'evento</b>: {name}'
+                                  '{description}'
+                                  '\n<a href="{url}">Clicca qui per visualizzare l\'evento su Calendari Google</a>',
+        'update_event_completed_description': '\n<b>Descrizione</b>: {description}',
         # -- Buttons --
         # Controls
         'first_page': '⏪ Prima pagina',
         'next_page': '▶️ Prossima pagina',
-        'add_event_button': '➕ Aggiungi un evento'
+        # Calendar
+        'add_event_button': '➕ Aggiungi un evento',
+        'edit_event_button': '✍️ Modifica',
+        'delete_event_button': '🗑 Elimina',
+        'update_event_same': '🙈 Lascia così'
     }
 ]
 

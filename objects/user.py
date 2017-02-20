@@ -8,6 +8,8 @@ c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY NOT NULL, state STRING, language STRING)')
 c.execute('CREATE TABLE IF NOT EXISTS calendar_create_event'
           '(id INTEGER NOT NULL, summary STRING, description STRING)')  # Only for caching messages
+c.execute('CREATE TABLE IF NOT EXISTS calendar_update_event'
+          '(id INTEGER NOT NULL, event STRING, summary STRING, description STRING)')  # Only for caching messages
 conn.commit()
 
 

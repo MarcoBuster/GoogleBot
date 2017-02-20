@@ -110,7 +110,7 @@ def process_callback(bot, chains, update):
         text, inline_keyboard = calendar.getevents(usr, [None, 3])
         bot.api.call('editMessageText',
                      {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': text, 'parse_mode': 'HTML',
+                      'text': text, 'parse_mode': 'HTML', 'disable_web_page_preview': True,
                       'reply_markup': inline_keyboard
                       })
 
@@ -128,6 +128,18 @@ def start(chat, message, args):
 
     if 'oauth@' in ''.join(args):
         oauth.save(usr, ''.join(args).replace('oauth@', ''))
+
+    if 'cd@edit@' in ''.join(args):
+        event_id = ''.join(args).replace('cd@edit@', '')
+        text = calendar.formatevent(usr, event_id)
+        bot.api.call('sendMessage', {
+            'chat_id': chat.id, 'text': text, 'parse_mode': 'HTML', 'reply_markup':
+                '{"inline_keyboard":'
+                '[[{"text": "' + usr.getstr('edit_event_button') + '", "callback_data": "cd@edit@' + event_id + '"},'
+                '{"text": "' + usr.getstr('delete_event_button') + '", "callback_data": "cd@delete@' + event_id + '"}],'
+                '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
+        })
+        return True
 
     if not usr.exists:
         text = (

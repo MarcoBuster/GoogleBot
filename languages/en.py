@@ -72,6 +72,8 @@ STRINGS = [
                                   '{description}'
                                   '\n<a href="{url}">Clicca qui per visualizzare l\'evento su Calendari Google</a>',
         'update_event_completed_description': '\n<b>Descrizione</b>: {description}',
+        # Delete
+        'deleted_event': '🗑 <b>Il tuo evento è stato eliminato con successo</b>',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',

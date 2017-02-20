@@ -222,6 +222,17 @@ def process_callback(bot, chains, update):
             c.execute('INSERT INTO calendar_update_event VALUES(?, ?, ?, ?)', (user.id, event_id, None, None))
             conn.commit()
 
+    if 'cd@delete@' in cb.query:
+        event_id = cb.query.replace('cd@delete@', '')
+        service = login(user)
+        service.events().delete(calendarId='primary', eventId=event_id, sendNotifications=True).execute()
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'parse_mode': 'HTML',
+            'text': user.getstr('deleted_event'), 'reply_markup':
+                '{"inline_keyboard": [[{"text": "' + user.getstr(
+                    'back_button') + '", "callback_data": "calendar"}]]}'
+        })
+
 
 def process_message(update):
     message = update.message

@@ -136,6 +136,9 @@ def start(chat, message, args):
         code = c.fetchone()[0]
         oauth.save(usr, code)
 
+        c.execute('DELETE FROM cache_oauth_codes WHERE code=?', (code,))
+        conn.commit()
+
     if 'cd-edit-' in ''.join(args):
         event_id = ''.join(args).replace('cd-edit-', '')
         text = calendar.formatevent(usr, event_id)

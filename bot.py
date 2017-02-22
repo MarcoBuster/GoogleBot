@@ -1,3 +1,5 @@
+import sqlite3
+
 import botogram.objects.base
 import botogram
 
@@ -26,6 +28,9 @@ class CallbackQuery(botogram.objects.base.BaseObject):
 botogram.Update.optional["callback_query"] = CallbackQuery
 
 bot = botogram.create(TOKEN)
+
+conn = sqlite3.connect('users.db')
+c = conn.cursor()
 
 
 def process_callback(bot, chains, update):
@@ -126,7 +131,10 @@ def start(chat, message, args):
     usr.state('home')
 
     if 'oauth-' in ''.join(args):
-        oauth.save(usr, ''.join(args).replace('oauth-', ''))
+        short_code = ''.join(args).replace('oauth-', '')
+        c.execute('SELECT code FROM cache_oauth_codes WHERE short_code=?', (short_code,))
+        code = c.fetchone()[0]
+        oauth.save(usr, code)
 
     if 'cd-edit-' in ''.join(args):
         event_id = ''.join(args).replace('cd-edit-', '')

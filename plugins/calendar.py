@@ -50,7 +50,7 @@ def formatevents(user, result):
         if event.get('creator').get('self'):
             creator = user.getstr('your_self')
 
-        edit = '<a href="t.me/CompleteGoogleBot?start=cd@edit@{id}">{edit}</a>'.format(id=event.get('id'),
+        edit = '<a href="t.me/CompleteGoogleBot?start=cd-edit-{id}">{edit}</a>'.format(id=event.get('id'),
                                                                                        edit=user.getstr('update_event'))
         text += (
             '\n🔸 <b>{title}</b> • {by} {creator} • {date}{location}{description} • {edit}\n'.format(

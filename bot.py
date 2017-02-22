@@ -125,11 +125,11 @@ def start(chat, message, args):
     usr = user.User(message.sender)
     usr.state('home')
 
-    if 'oauth@' in ''.join(args):
-        oauth.save(usr, ''.join(args).replace('oauth@', ''))
+    if 'oauth-' in ''.join(args):
+        oauth.save(usr, ''.join(args).replace('oauth-', ''))
 
-    if 'cd@edit@' in ''.join(args):
-        event_id = ''.join(args).replace('cd@edit@', '')
+    if 'cd-edit-' in ''.join(args):
+        event_id = ''.join(args).replace('cd-edit-', '')
         text = calendar.formatevent(usr, event_id)
         bot.api.call('sendMessage', {
             'chat_id': chat.id, 'text': text, 'parse_mode': 'HTML', 'reply_markup':

@@ -1,6 +1,5 @@
 import botogram.objects.base
 import botogram
-import os
 
 from config import *
 from objects import callback, user, message_update
@@ -114,8 +113,8 @@ def process_callback(bot, chains, update):
                       'reply_markup': inline_keyboard
                       })
 
-    news.process_callback(bot, chains, update)
-    calendar.process_callback(bot, chains, update)
+    news.process_callback(bot, cb, usr)
+    calendar.process_callback(bot, cb, usr)
 
 
 bot.register_update_processor("callback_query", process_callback)

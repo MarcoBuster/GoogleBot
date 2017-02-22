@@ -2,8 +2,6 @@ from apiclient import discovery
 import httplib2
 
 from datetime import datetime
-from objects import callback
-from objects import user as _user
 
 import sqlite3
 
@@ -133,10 +131,7 @@ def getevents(user, elements_range):
     return text, inline_keyboard
 
 
-def process_callback(bot, chains, update):
-    cb = callback.Callback(update)
-    user = _user.User(cb.sender)
-
+def process_callback(bot, cb, user):
     if 'cd@' in cb.query:
         if 'cd@list@' in cb.query:
             page = cb.query.replace('cd@list@', '')

@@ -1,6 +1,5 @@
 import feedparser
 import bs4
-from objects import callback, user
 
 
 def get(query='', lang='en'):
@@ -22,10 +21,7 @@ def get(query='', lang='en'):
     return text
 
 
-def process_callback(bot, chains, update):
-    cb = callback.Callback(update)
-    usr = user.User(cb.sender)
-
+def process_callback(bot, cb, usr):
     if cb.query == 'news':
         if usr.exists:
             lang = usr.language()

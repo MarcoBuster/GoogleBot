@@ -1,6 +1,6 @@
 # Telegram Google Bot [![Build Status](https://travis-ci.org/MarcoBuster/GoogleBot.svg?branch=master)](https://travis-ci.org/MarcoBuster/GoogleBot)
 ## Introduction
-[Telegram](https://telegram.org) is a messaging application that allows you to use [bots](https://core.telegram.org/bots), developed using [Telegram Bot APIs](https//core.telegram.org/bots/api).
+[Telegram](https://telegram.org) is a messaging application that allows you to use [bots](https://core.telegram.org/bots), developed using [Telegram Bot APIs](https://core.telegram.org/bots/api).
 Google Bot will be a Telegram Bot for [Google](https://developers.google.com) Services & APIs. 
 
 ## Features
@@ -13,13 +13,13 @@ Currently implemented features, services and APIs:
 * And much more to come!
 
 ## Credits and license
-Developer of this project is [Marco Aceti](telegram.me/MarcoBuster).
+Developer of this project is [Marco Aceti](https://telegram.me/MarcoBuster).
 All code and translations are relased under [MIT License](https://raw.githubusercontent.com/MarcoBuster/GoogleBot/blob/master/LICENSE).
 
 This software is relased "as is", without warranty of any kind.
 
 ### Translators
-* **Italian translation**: [Marco Aceti](telegram.me/MarcoBuster)
-* **English translation**: [Marco Aceti](telegram.me/MarcoBuster) and [Pietro Arado](telegram.me/ProfOak)
+* **Italian translation**: [Marco Aceti](https://telegram.me/MarcoBuster)
+* **English translation**: [Marco Aceti](https://telegram.me/MarcoBuster) and [Pietro Arado](https://telegram.me/ProfOak)
 
 **Copyright © Marco Aceti 2017.**

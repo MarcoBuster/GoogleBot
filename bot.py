@@ -12,6 +12,9 @@ from oauth import oauth
 import googlemaps
 from config import GOOGLE_API_KEY, SERVER_TIMEZONE
 
+import subprocess
+subprocess.Popen(['python3', 'callback_handler.py'])
+
 gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
 
 

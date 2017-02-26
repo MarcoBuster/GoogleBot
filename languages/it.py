@@ -23,6 +23,11 @@ STRINGS = [
         'calendar_button': '📅 Calendario',
         'setlan_button': '⚙ Cambia lingua',
         'setlan': '<b>Seleziona la tua lingua</b> - Select your language',
+        # -- Initial setup strings --
+        # Timezone
+        'ask_timezone': 'Per favore, invia ora la tua posizione così potrò determinare il tuo <b>fuso orario</b>',
+        'ask_timezone_no_location': 'Per favore, invia una posizione dal menù allegati',
+        'ask_timezone_no_results': '<b>Posizione non valida</b>\nProva a selezionare un luogo più conosciuto!',
         # -- Calendar plugin strings --
         # Events list
         'header': '📅 <b>Tutti i tuoi eventi sul calendario</b>',

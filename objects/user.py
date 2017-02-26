@@ -5,7 +5,8 @@ from oauth2client.file import Storage
 
 conn = sqlite3.connect('users.db')
 c = conn.cursor()
-c.execute('CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY NOT NULL, state STRING, language STRING)')
+c.execute('CREATE TABLE IF NOT EXISTS users'
+          '(id INTEGER PRIMARY KEY NOT NULL, state STRING, language STRING, timezone FLOAT)')
 c.execute('CREATE TABLE IF NOT EXISTS calendar_create_event'
           '(id INTEGER NOT NULL, summary STRING, description STRING)')  # Only for caching messages
 c.execute('CREATE TABLE IF NOT EXISTS calendar_update_event'
@@ -32,7 +33,7 @@ class User:
             conn.commit()
             return
 
-        c.execute('INSERT OR IGNORE INTO users VALUES(?, ?, ?)', (self.id, state, language,))
+        c.execute('INSERT OR IGNORE INTO users VALUES(?, ?, ?, ?)', (self.id, state, language, None))
         conn.commit()
 
     @property
@@ -41,8 +42,7 @@ class User:
         row = c.fetchone()
         if not row or row[0] is None:
             return False
-        else:
-            return True
+        return True
 
     def language(self, new_language=None):
         if new_language is None:
@@ -50,11 +50,21 @@ class User:
             row = c.fetchone()
             if not row:
                 return False
-            else:
-                return row[0]
-        else:
-            c.execute('UPDATE OR IGNORE users SET language=? WHERE id=?', (new_language, self.id))
-            conn.commit()
+            return row[0]
+
+        c.execute('UPDATE OR IGNORE users SET language=? WHERE id=?', (new_language, self.id))
+        conn.commit()
+
+    def timezone(self, new_timezone=None):
+        if new_timezone is None:
+            c.execute('SELECT timezone FROM users WHERE id=?', (self.id,))
+            row = c.fetchone()
+            if not row or row[0] is None:
+                return False
+            return row[0]
+
+        c.execute('UPDATE OR IGNORE users SET timezone=? WHERE id=?', (new_timezone, self.id))
+        conn.commit()
 
     def state(self, new_state=None):
         if new_state is None:

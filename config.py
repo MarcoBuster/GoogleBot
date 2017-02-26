@@ -8,4 +8,8 @@ PLOTLY_API_KEY = ''
 
 GOOGLE_OAUTH_CLIENT_ID = ''
 GOOGLE_OAUTH_CLIENT_SECRET = ''
-GOOGLE_OAUTH_REDIRECT_URI = 'https://callback.marcoaceti.it/google_oauth'
+GOOGLE_OAUTH_REDIRECT_URI = ''
+
+GOOGLE_API_KEY = ''
+
+SERVER_TIMEZONE = 0  # Default server timezone (in seconds). For example, GMT +1 is 3600, GMT -3 -10800.

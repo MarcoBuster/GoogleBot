@@ -9,6 +9,11 @@ from plugins import news, trends, calendar
 
 from oauth import oauth
 
+import googlemaps
+from config import GOOGLE_API_KEY, SERVER_TIMEZONE
+
+gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
+
 
 class CallbackQuery(botogram.objects.base.BaseObject):
     required = {
@@ -164,6 +169,11 @@ def start(chat, message, args):
                       })
         return
 
+    if not usr.timezone():
+        chat.send(usr.getstr('ask_timezone'))
+        usr.state('timezone')
+        return
+
     bot.api.call('sendMessage', {
         'chat_id': chat.id,
         'text': usr.getstr('start'), 'parse_mode': 'HTML',
@@ -180,6 +190,21 @@ def start(chat, message, args):
 @bot.process_message
 def process_message(message, chat):
     usr = user.User(message.sender)
+
+    if usr.state() == 'timezone':
+        if message.location is None:
+            message.reply(usr.getstr('ask_timezone_no_location'))
+            return True
+
+        lat = message.location.latitude
+        lon = message.location.longitude
+        result = gmaps.timezone([lat, lon]).get('rawOffset', False)
+        if not result:
+            message.reply(usr.getstr('ask_timezone_no_results'))
+            return True
+
+        usr.timezone(result - SERVER_TIMEZONE)
+        start(chat, message, args=[])
 
     update = message_update.MessageUpdate(usr, bot, chat, message)
     trends.process_message(update)

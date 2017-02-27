@@ -7,7 +7,7 @@ LANGUAGE_CODE = 'en'  # Must respect this: https://en.wikipedia.org/wiki/List_of
 
 STRINGS = [
     {
-        'start': '<b>Welcome to the bot!</b>\nYou are using the <b>english translation</b>.',
+        'start': '<b>Welcome to the bot!</b>\nYou are using the <b>English translation</b>.',
         'sign_in': '👤 <b>Sign in with Google</b>'
                    '\nSign in with Google to use this bot',
         'sign_in_button': '👤 Sign in with Google',
@@ -17,7 +17,7 @@ STRINGS = [
         'settings': 'What setting would you like to change?',
         'trends_button': '📊 Trends',
         'trends': '🔍 Insert a <b>query</b> you would to view the 📊  <b>stats</b> for',
-        'trends_not_found': '❌ <b>No results</b>\nTry searching more general things',
+        'trends_not_found': '❌ <b>No results</b>\nTry searching more general keywords',
         'generating_graph': '🔄 <b>I\'m generating the graph...</b>',
         'generated_graph': '✅ <b>Graph generated successfully.</b>',
         'calendar_button': '📅 Calendar',
@@ -25,9 +25,9 @@ STRINGS = [
         'setlan': '<b>Select your language</b>',
         # -- Initial setup strings --
         # Timezone
-        'ask_timezone': 'Per favore, invia ora la tua posizione così potrò determinare il tuo <b>fuso orario</b>',
-        'ask_timezone_no_location': 'Per favore, invia una posizione dal menù allegati',
-        'ask_timezone_no_results': '<b>Posizione non valida</b>\nProva a selezionare un luogo più conosciuto!',
+        'ask_timezone': 'Please, send me your location, I will determine your <b>timezone</b>',
+        'ask_timezone_no_location': 'Please, send me your location from the attachments menu.',
+        'ask_timezone_no_results': '<b>Invalid location</b>\nTry selecting a better known place!',
         # -- Calendar plugin strings --
         # Events list
         'header': '📅 <b>All the events in your calendar</b>',

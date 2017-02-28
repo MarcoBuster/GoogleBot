@@ -6,11 +6,11 @@ from oauth2client.file import Storage
 conn = sqlite3.connect('users.sqlite')
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users'
-          '(id INTEGER PRIMARY KEY NOT NULL, state STRING, language STRING, timezone FLOAT)')
+          '(id INTEGER PRIMARY KEY NOT NULL, state TEXT, language TEXT, timezone TEXT)')
 c.execute('CREATE TABLE IF NOT EXISTS calendar_create_event'
-          '(id INTEGER NOT NULL, summary STRING, description STRING)')  # Only for caching messages
+          '(id INTEGER NOT NULL, summary TEXT, description TEXT)')  # Only for caching messages
 c.execute('CREATE TABLE IF NOT EXISTS calendar_update_event'
-          '(id INTEGER NOT NULL, event STRING, summary STRING, description STRING)')  # Only for caching messages
+          '(id INTEGER NOT NULL, event TEXT, summary TEXT, description TEXT)')  # Only for caching messages
 c.execute('CREATE TABLE IF NOT EXISTS cache_oauth_codes(code TEXT, short_code TEXT, created_at DATETIME)')
 conn.commit()
 

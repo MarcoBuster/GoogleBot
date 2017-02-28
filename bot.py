@@ -201,7 +201,7 @@ def process_message(message, chat):
 
         lat = message.location.latitude
         lon = message.location.longitude
-        result = gmaps.timezone([lat, lon]).get('rawOffset', False)
+        result = gmaps.timezone([lat, lon]).get('timeZoneId', False)
         if not result:
             message.reply(usr.getstr('ask_timezone_no_results'))
             return True

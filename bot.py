@@ -37,7 +37,7 @@ botogram.Update.optional["callback_query"] = CallbackQuery
 
 bot = botogram.create(TOKEN)
 
-conn = sqlite3.connect('users.db')
+conn = sqlite3.connect('users.sqlite')
 c = conn.cursor()
 
 

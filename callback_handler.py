@@ -7,7 +7,7 @@ from flask import Flask, redirect
 from flask import request
 app = Flask(__name__)
 
-conn = sqlite3.connect('users.db')
+conn = sqlite3.connect('users.sqlite')
 c = conn.cursor()
 
 

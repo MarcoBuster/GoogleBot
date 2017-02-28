@@ -3,7 +3,7 @@ from languages import it, en
 import os
 from oauth2client.file import Storage
 
-conn = sqlite3.connect('users.db')
+conn = sqlite3.connect('users.sqlite')
 c = conn.cursor()
 c.execute('CREATE TABLE IF NOT EXISTS users'
           '(id INTEGER PRIMARY KEY NOT NULL, state STRING, language STRING, timezone FLOAT)')
@@ -16,7 +16,7 @@ conn.commit()
 
 
 class User:
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect('users.sqlite')
     c = conn.cursor()
 
     def __init__(self, user, language=None, state=None):

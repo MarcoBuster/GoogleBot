@@ -12,6 +12,7 @@ c.execute('CREATE TABLE IF NOT EXISTS calendar_create_event'
 c.execute('CREATE TABLE IF NOT EXISTS calendar_update_event'
           '(id INTEGER NOT NULL, event TEXT, summary TEXT, description TEXT)')  # Only for caching messages
 c.execute('CREATE TABLE IF NOT EXISTS cache_oauth_codes(code TEXT, short_code TEXT, created_at DATETIME)')
+c.execute('CREATE TABLE IF NOT EXISTS cache_calendar_page_tokens(token TEXT, short_token TEXT)')
 conn.commit()
 
 

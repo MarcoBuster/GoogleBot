@@ -4,6 +4,9 @@ import httplib2
 from datetime import datetime
 import pytz
 
+import random
+import string
+
 import sqlite3
 
 conn = sqlite3.connect('users.sqlite')
@@ -117,7 +120,11 @@ def getevents(user, elements_range):
     else:
         firstpage = ''
     if pagetoken is not None:
-        nextpage = '{"text": "' + user.getstr('next_page') + '", "callback_data": "cd@list@' + pagetoken + '"}'
+        randstring = ''.join(
+            random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
+        c.execute('INSERT INTO cache_calendar_page_tokens VALUES(?, ?)', (pagetoken, randstring))
+        conn.commit()
+        nextpage = '{"text": "' + user.getstr('next_page') + '", "callback_data": "cd@list@' + randstring + '"}'
     else:
         nextpage = ''
     if firstpage == '' and nextpage == '':
@@ -141,6 +148,11 @@ def process_callback(bot, cb, user):
             if page == "first":
                 text, inline_keyboard = getevents(user, elements_range=[None, 3])
             else:
+                c.execute('SELECT token FROM cache_calendar_page_tokens WHERE short_token=?', (page,))
+                page = c.fetchone()[0]
+
+                c.execute('DELETE FROM cache_calendar_page_tokens WHERE token=?', (page,))
+                conn.commit()
                 text, inline_keyboard = getevents(user, elements_range=[page, 3])
 
             bot.api.call('editMessageText',

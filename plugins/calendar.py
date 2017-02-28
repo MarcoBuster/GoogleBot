@@ -2,6 +2,7 @@ from apiclient import discovery
 import httplib2
 
 from datetime import datetime
+import pytz
 
 import sqlite3
 
@@ -10,7 +11,7 @@ c = conn.cursor()
 
 
 def build_rfc3339_phrase(datetime_obj):
-    datetime_phrase = datetime_obj.strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+    datetime_phrase = datetime_obj.strftime('%Y-%m-%dT%H:%M:%S%z')
     return datetime_phrase
 
 
@@ -102,8 +103,9 @@ def formatevent(user, event_id):
 
 def getevents(user, elements_range):
     service = login(user)
+    timezone = pytz.timezone(user.timezone())
     command = service.events().list(
-        calendarId='primary', timeMin=datetime.utcnow().isoformat() + 'Z',
+        calendarId='primary', timeMin=datetime.now(tz=timezone).isoformat(),
         maxResults=elements_range[1], singleEvents=True, orderBy='startTime', pageToken=elements_range[0]
     )
     result = command.execute()
@@ -277,11 +279,12 @@ def process_message(update):
                 })
 
         try:
+            timezone = pytz.timezone(user.timezone())
             start = message.text.split('-')[0].lstrip().rstrip()
             end = message.text.split('-')[1].lstrip().rstrip()
 
-            start = build_rfc3339_phrase(datetime.strptime(start, '%H:%M %d/%m/%Y'))
-            end = build_rfc3339_phrase(datetime.strptime(end, '%H:%M %d/%m/%Y'))
+            start = build_rfc3339_phrase(timezone.localize(datetime.strptime(start, '%H:%M %d/%m/%Y')))
+            end = build_rfc3339_phrase(timezone.localize(datetime.strptime(end, '%H:%M %d/%m/%Y')))
         except IndexError:
             bot.api.call('sendMessage', {
                 'chat_id': chat.id, 'parse_mode': 'HTML',
@@ -371,11 +374,12 @@ def process_message(update):
                 })
 
         try:
+            timezone = pytz.timezone(user.timezone())
             start = message.text.split('-')[0].lstrip().rstrip()
             end = message.text.split('-')[1].lstrip().rstrip()
 
-            start = build_rfc3339_phrase(datetime.strptime(start, '%H:%M %d/%m/%Y'))
-            end = build_rfc3339_phrase(datetime.strptime(end, '%H:%M %d/%m/%Y'))
+            start = build_rfc3339_phrase(timezone.localize(datetime.strptime(start, '%H:%M %d/%m/%Y')))
+            end = build_rfc3339_phrase(timezone.localize(datetime.strptime(end, '%H:%M %d/%m/%Y')))
         except IndexError:
             bot.api.call('sendMessage', {
                 'chat_id': chat.id, 'parse_mode': 'HTML',

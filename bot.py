@@ -206,7 +206,7 @@ def process_message(message, chat):
             message.reply(usr.getstr('ask_timezone_no_results'))
             return True
 
-        usr.timezone(result - SERVER_TIMEZONE)
+        usr.timezone(result)
         start(chat, message, args=[])
 
     update = message_update.MessageUpdate(usr, bot, chat, message)

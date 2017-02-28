@@ -10,7 +10,7 @@ from plugins import news, trends, calendar
 from oauth import oauth
 
 import googlemaps
-from config import GOOGLE_API_KEY, SERVER_TIMEZONE
+from config import GOOGLE_API_KEY
 
 import subprocess
 subprocess.Popen(['python3', 'callback_handler.py'])

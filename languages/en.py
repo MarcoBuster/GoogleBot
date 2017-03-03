@@ -79,6 +79,10 @@ STRINGS = [
         'update_event_completed_description': '\n<b>Description</b>: {description}',
         # Delete
         'deleted_event': '🗑 <b>Your event has been deleted.</b>',
+        # -- Drive plugins strings --
+        # List
+        'drive_list_header': '📂 <b>Your files</b>',
+        'drive_list_no_files': '❌ <b>No files found in your Google Drive account</b>',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',

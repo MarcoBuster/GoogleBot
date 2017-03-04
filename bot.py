@@ -164,14 +164,17 @@ def start(chat, message, args):
         conn.commit()
 
     if 'cd-edit-' in ''.join(args):
-        event_id = ''.join(args).replace('cd-edit-', '')
+        short_event_id = ''.join(args).replace('cd-edit-', '')
+        c.execute('SELECT id FROM cache_calendar_event_ids WHERE short_id=?', (short_event_id,))
+        event_id = c.fetchone()[0]
+
         text = calendar.formatevent(usr, event_id)
         bot.api.call('sendMessage', {
             'chat_id': chat.id, 'text': text, 'parse_mode': 'HTML', 'reply_markup':
                 json.dumps(
                     {'inline_keyboard': [
-                        [{"text": usr.getstr('edit_event_button'), "callback_data": "cd@edit@" + event_id},
-                         {"text": usr.getstr('delete_event_button'), "callback_data": "cd@delete@" + event_id}],
+                        [{"text": usr.getstr('edit_event_button'), "callback_data": "cd@edit@" + short_event_id},
+                         {"text": usr.getstr('delete_event_button'), "callback_data": "cd@delete@" + short_event_id}],
                         [{"text": usr.getstr('back_button'), "callback_data": "home"}]
                     ]}
                 )

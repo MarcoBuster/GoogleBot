@@ -56,8 +56,19 @@ def formatevents(user, result):
         if event.get('creator').get('self'):
             creator = user.getstr('your_self')
 
-        edit = '<a href="t.me/CompleteGoogleBot?start=cd-edit-{id}">{edit}</a>'.format(id=event.get('id'),
+        c.execute('SELECT short_id FROM cache_calendar_event_ids WHERE id=?', (event.get('id'),))
+        row = c.fetchone()
+        if row:
+            short_id = row[0]
+        else:
+            short_id = ''.join(
+                random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
+            c.execute('INSERT INTO cache_calendar_event_ids VALUES(?, ?)', (event.get('id'), short_id))
+            conn.commit()
+
+        edit = '<a href="t.me/CompleteGoogleBot?start=cd-edit-{id}">{edit}</a>'.format(id=short_id,
                                                                                        edit=user.getstr('update_event'))
+
         text += (
             '\n🔸 <b>{title}</b> • {by} {creator} • {date}{location}{description} • {edit}\n'.format(
                 title=event.get('summary', user.getstr('no_title')), by=user.getstr('event_by'), creator=creator,
@@ -258,11 +269,15 @@ def process_callback(bot, cb, user):
             })
             user.state('calendar_update_event_1')
             event_id = cb.query.replace('cd@edit@', '')
+            c.execute('SELECT id FROM cache_calendar_event_ids WHERE short_id=?', (event_id,))
+            event_id = c.fetchone()[0]
             c.execute('INSERT INTO calendar_update_event VALUES(?, ?, ?, ?)', (user.id, event_id, None, None))
             conn.commit()
 
     if 'cd@delete@' in cb.query:
         event_id = cb.query.replace('cd@delete@', '')
+        c.execute('SELECT id FROM cache_calendar_event_ids WHERE short_id=?', (event_id,))
+        event_id = c.fetchone()[0]
         service = login(user)
         service.events().delete(calendarId='primary', eventId=event_id, sendNotifications=True).execute()
         bot.api.call('editMessageText', {

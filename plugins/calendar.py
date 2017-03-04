@@ -7,6 +7,8 @@ import pytz
 import random
 import string
 
+import json
+
 import sqlite3
 
 conn = sqlite3.connect('users.sqlite')
@@ -116,27 +118,45 @@ def getevents(user, elements_range):
     pagetoken = result.get('nextPageToken', None)
 
     if elements_range[0] is not None:
-        firstpage = '{"text": "' + user.getstr('first_page') + '", "callback_data": "cd@list@first"}'
+        firstpage = {"text": user.getstr('first_page'), "callback_data": "cd@list@first"}
     else:
-        firstpage = ''
+        firstpage = None
     if pagetoken is not None:
         randstring = ''.join(
             random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
         c.execute('INSERT INTO cache_calendar_page_tokens VALUES(?, ?)', (pagetoken, randstring))
         conn.commit()
-        nextpage = '{"text": "' + user.getstr('next_page') + '", "callback_data": "cd@list@' + randstring + '"}'
+        nextpage = {"text": user.getstr('next_page'), "callback_data": "cd@list@" + randstring}
     else:
-        nextpage = ''
-    if firstpage == '' and nextpage == '':
-        br1, br2 = '', ''
-    else:
-        br1 = '['
-        br2 = '], '
+        nextpage = None
 
-    inline_keyboard = '{"inline_keyboard": ' \
-                      '[' + br1 + firstpage + (',' if firstpage != '' and nextpage != '' else '') + nextpage \
-                      + br2 + '[{"text": "' + user.getstr('add_event_button') + '", "callback_data": "cd@add"}],' + \
-                      '[{"text": "' + user.getstr('back_button') + '", "callback_data": "home"}]]}'
+    inline_keyboard = json.dumps({"inline_keyboard": [
+        [{"text": user.getstr('add_event_button'), "callback_data": "cd@add"}],
+        [{"text": user.getstr('back_button'), "callback_data": "home"}]
+    ]})
+    if not firstpage and not nextpage:
+        inline_keyboard = json.dumps({"inline_keyboard": [
+            [{"text": user.getstr('add_event_button'), "callback_data": "cd@add"}],
+            [{"text": user.getstr('back_button'), "callback_data": "home"}]
+        ]})
+    elif firstpage and not nextpage:
+        inline_keyboard = json.dumps({"inline_keyboard": [
+            [firstpage],
+            [{"text": user.getstr('add_event_button'), "callback_data": "cd@add"}],
+            [{"text": user.getstr('back_button'), "callback_data": "home"}]
+        ]})
+    elif not firstpage and nextpage:
+        inline_keyboard = json.dumps({"inline_keyboard": [
+            [nextpage],
+            [{"text": user.getstr('add_event_button'), "callback_data": "cd@add"}],
+            [{"text": user.getstr('back_button'), "callback_data": "home"}]
+        ]})
+    elif firstpage and nextpage:
+        inline_keyboard = json.dumps({"inline_keyboard": [
+            [firstpage, nextpage],
+            [{"text": user.getstr('add_event_button'), "callback_data": "cd@add"}],
+            [{"text": user.getstr('back_button'), "callback_data": "home"}]
+        ]})
     return text, inline_keyboard
 
 
@@ -155,18 +175,20 @@ def process_callback(bot, cb, user):
                 conn.commit()
                 text, inline_keyboard = getevents(user, elements_range=[page, 3])
 
-            bot.api.call('editMessageText',
-                         {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                          'text': text, 'parse_mode': 'HTML', 'disable_web_page_preview': True,
-                          'reply_markup': inline_keyboard
-                          })
+            bot.api.call('editMessageText', {
+                'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': text,
+                'parse_mode': 'HTML', 'disable_web_page_preview': True, 'reply_markup': inline_keyboard
+            })
 
         if 'cd@add' in cb.query:
             bot.api.call('editMessageText', {
                 'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'parse_mode': 'HTML',
                 'text': user.getstr('create_event_header') + user.getstr('create_event_first_step'), 'reply_markup':
-                    '{"inline_keyboard": [[{"text": "' + user.getstr(
-                        'back_button') + '", "callback_data": "calendar"}]]}'
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                    ]}
+                )
             })
             user.state('calendar_create_event_1')
 
@@ -185,9 +207,12 @@ def process_callback(bot, cb, user):
                         'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'parse_mode': 'HTML',
                         'text': user.getstr('update_event_header') + user.getstr('update_event_second_step'),
                         'reply_markup':
-                            '{"inline_keyboard": [[{"text": "' + user.getstr('update_event_same') +
-                            '", "callback_data": "cd@edit@same"}],'
-                            '[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+                        json.dumps(
+                            {"inline_keyboard": [
+                                [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
+                                [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                            ]}
+                        )
                     })
                     user.state('calendar_update_event_2')
                 else:
@@ -212,19 +237,24 @@ def process_callback(bot, cb, user):
                     bot.api.call('editMessageText', {
                         'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'parse_mode': 'HTML',
                         'text': text, 'reply_markup':
-                            '{"inline_keyboard":'
-                            '[[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+                        json.dumps(
+                            {"inline_keyboard": [
+                                [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                            ]}
+                        )
                     })
-
                     user.state('home')
                 return
 
             bot.api.call('editMessageText', {
                 'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'parse_mode': 'HTML',
                 'text': user.getstr('update_event_header') + user.getstr('update_event_first_step'), 'reply_markup':
-                    '{"inline_keyboard": [[{"text": "' + user.getstr('update_event_same') +
-                    '", "callback_data": "cd@edit@same"}],'
-                    '[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
+                        [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                    ]}
+                )
             })
             user.state('calendar_update_event_1')
             event_id = cb.query.replace('cd@edit@', '')
@@ -238,8 +268,11 @@ def process_callback(bot, cb, user):
         bot.api.call('editMessageText', {
             'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'parse_mode': 'HTML',
             'text': user.getstr('deleted_event'), 'reply_markup':
-                '{"inline_keyboard": [[{"text": "' + user.getstr(
-                    'back_button') + '", "callback_data": "calendar"}]]}'
+            json.dumps(
+                {"inline_keyboard": [
+                    [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                ]}
+            )
         })
 
 
@@ -254,8 +287,11 @@ def process_message(update):
             bot.api.call('sendMessage', {
                 'chat_id': chat.id, 'parse_mode': 'HTML',
                 'text': user.getstr('create_event_header') + user.getstr('create_event_notext_error'), 'reply_markup':
-                    '{"inline_keyboard": [[{"text": "' + user.getstr(
-                        'back_button') + '", "callback_data": "calendar"}]]}'
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                    ]}
+                )
             })
 
     if user.state() == 'calendar_create_event_1':
@@ -276,7 +312,11 @@ def process_message(update):
         bot.api.call('sendMessage', {
             'chat_id': chat.id, 'parse_mode': 'HTML',
             'text': user.getstr('create_event_header') + user.getstr('create_event_second_step'), 'reply_markup':
-                '{"inline_keyboard": [[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+            json.dumps(
+                {"inline_keyboard": [
+                    [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                ]}
+            )
         })
 
     elif user.state() == 'calendar_create_event_2':
@@ -286,8 +326,11 @@ def process_message(update):
                     'chat_id': chat.id, 'parse_mode': 'HTML',
                     'text': user.getstr('create_event_header') + user.getstr('create_event_notext_error'),
                     'reply_markup':
-                        '{"inline_keyboard": [[{"text": "' + user.getstr(
-                            'back_button') + '", "callback_data": "calendar"}]]}'
+                    json.dumps(
+                        {"inline_keyboard": [
+                            [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                        ]}
+                    )
                 })
 
         try:
@@ -302,8 +345,11 @@ def process_message(update):
                 'chat_id': chat.id, 'parse_mode': 'HTML',
                 'text': user.getstr('create_event_header') + user.getstr('create_event_timeformatting_error'),
                 'reply_markup':
-                    '{"inline_keyboard": [[{"text": "' + user.getstr(
-                        'back_button') + '", "callback_data": "calendar"}]]}'
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                    ]}
+                )
             })
             return
         except ValueError:
@@ -311,8 +357,11 @@ def process_message(update):
                 'chat_id': chat.id, 'parse_mode': 'HTML',
                 'text': user.getstr('create_event_header') + user.getstr('create_event_timeformatting_error'),
                 'reply_markup':
-                    '{"inline_keyboard": [[{"text": "' + user.getstr(
-                        'back_button') + '", "callback_data": "calendar"}]]}'
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                    ]}
+                )
             })
             return
 
@@ -345,10 +394,12 @@ def process_message(update):
                                                                     .format(description=description)
                                                                 if description is not None else ''))
         bot.api.call('sendMessage', {
-            'chat_id': chat.id, 'parse_mode': 'HTML',
-            'text': text, 'reply_markup':
-                '{"inline_keyboard":'
-                '[[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+            'chat_id': chat.id, 'parse_mode': 'HTML', 'text': text, 'reply_markup':
+            json.dumps(
+                {"inline_keyboard": [
+                    [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                ]}
+            )
         })
 
     # Update event
@@ -368,9 +419,12 @@ def process_message(update):
         bot.api.call('sendMessage', {
             'chat_id': chat.id, 'parse_mode': 'HTML',
             'text': user.getstr('update_event_header') + user.getstr('update_event_second_step'), 'reply_markup':
-                '{"inline_keyboard": [[{"text": "' + user.getstr('update_event_same') +
-                '", "callback_data": "cd@edit@same"}],'
-                '[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+            json.dumps(
+                {"inline_keyboard": [
+                    [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
+                    [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                ]}
+            )
         })
 
     elif user.state() == 'calendar_update_event_2':
@@ -380,9 +434,12 @@ def process_message(update):
                     'chat_id': chat.id, 'parse_mode': 'HTML',
                     'text': user.getstr('update_event_header') + user.getstr('update_event_notext_error'),
                     'reply_markup':
-                        '{"inline_keyboard": [[{"text": "' + user.getstr('update_event_same') +
-                        '", "callback_data": "cd@edit@same"}],'
-                        '[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+                    json.dumps(
+                        {"inline_keyboard": [
+                            [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
+                            [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                        ]}
+                    )
                 })
 
         try:
@@ -397,8 +454,11 @@ def process_message(update):
                 'chat_id': chat.id, 'parse_mode': 'HTML',
                 'text': user.getstr('update_event_header') + user.getstr('update_event_timeformatting_error'),
                 'reply_markup':
-                    '{"inline_keyboard": [[{"text": "' + user.getstr(
-                        'back_button') + '", "callback_data": "calendar"}]]}'
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                    ]}
+                )
             })
             return
         except ValueError:
@@ -406,8 +466,11 @@ def process_message(update):
                 'chat_id': chat.id, 'parse_mode': 'HTML',
                 'text': user.getstr('update_event_header') + user.getstr('update_event_timeformatting_error'),
                 'reply_markup':
-                    '{"inline_keyboard": [[{"text": "' + user.getstr(
-                        'back_button') + '", "callback_data": "calendar"}]]}'
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                    ]}
+                )
             })
             return
 
@@ -438,8 +501,10 @@ def process_message(update):
                                                                     .format(description=description)
                                                                 if description is not None else ''))
         bot.api.call('sendMessage', {
-            'chat_id': chat.id, 'parse_mode': 'HTML',
-            'text': text, 'reply_markup':
-                '{"inline_keyboard":'
-                '[[{"text": "' + user.getstr('back_button') + '", "callback_data": "calendar"}]]}'
+            'chat_id': chat.id, 'parse_mode': 'HTML', 'text': text, 'reply_markup':
+            json.dumps(
+                {"inline_keyboard": [
+                    [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
+                ]}
+            )
         })

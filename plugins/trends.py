@@ -10,6 +10,8 @@ import os
 import random
 import string
 
+import json
+
 pytrend = TrendReq(GOOGLE_USERNAME, GOOGLE_PASSWORD, custom_useragent='test')
 plotly.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
 
@@ -62,10 +64,13 @@ def process_message(update):
         file = graph(message.text)
         if not file:
             bot.api.call('editMessageText', {
-                'chat_id': chat.id, 'message_id': msg.message_id,
-                'text': usr.getstr('trends_not_found'), 'parse_mode': 'HTML',
-                'reply_markup': '{"inline_keyboard": ['
-                                '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
+                'chat_id': chat.id, 'message_id': msg.message_id, 'text': usr.getstr('trends_not_found'),
+                'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": usr.getstr('back_button'), "callback_data": "home"}]
+                    ]}
+                )
             })
             usr.state('home')
             return True

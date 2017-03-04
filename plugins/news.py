@@ -1,6 +1,8 @@
 import feedparser
 import bs4
 
+import json
+
 
 def get(query='', lang='en'):
     d = feedparser.parse('https://news.google.it/news?cf=all&hl={l}&query={q}&pz=1&ned={l}&output=rss'
@@ -29,7 +31,11 @@ def process_callback(bot, cb, usr):
             lang = 'en'
 
         bot.api.call('editMessageText', {
-            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': get(lang=lang), 'parse_mode': 'HTML',
-            'reply_markup': '{"inline_keyboard": '
-                            '[[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': get(lang=lang),
+            'parse_mode': 'HTML', 'reply_markup':
+            json.dumps(
+                {"inline_keyboard": [
+                    [{"text": usr.getstr('back_button'), "callback_data": "home"}]
+                ]}
+            )
         })

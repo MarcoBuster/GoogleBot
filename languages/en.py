@@ -21,8 +21,8 @@ STRINGS = [
         'generating_graph': '🔄 <b>I\'m generating the graph...</b>',
         'generated_graph': '✅ <b>Graph generated successfully.</b>',
         'calendar_button': '📅 Calendar',
-        'setlan_button': '⚙ Change language',
-        'setlan': '<b>Select your language</b>',
+        'setlang_button': '⚙ Change language',
+        'setlang': '<b>Select your language</b>',
         # -- Initial setup strings --
         # Timezone
         'ask_timezone': 'Please, send me your location, I will determine your <b>timezone</b>',

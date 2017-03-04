@@ -12,6 +12,8 @@ from oauth import oauth
 import googlemaps
 from config import GOOGLE_API_KEY
 
+import json
+
 import subprocess
 subprocess.Popen(['python3', 'callback_handler.py'])
 
@@ -51,80 +53,94 @@ def process_callback(bot, chains, update):
             cb.query = 'home'
 
     if not usr.logged_in and usr.exists:
-        bot.api.call('editMessageText',
-                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': usr.getstr('sign_in'), 'parse_mode': 'HTML',
-                      'reply_markup': '{"inline_keyboard": '
-                                      '[[{"text": '
-                                      '"' + usr.getstr('sign_in_button') + '",'
-                                                                           ' "url": "' + oauth.get_url() + '"}]]}'
-                      })
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': usr.getstr('sign_in'),
+            'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {'inline_keyboard': [
+                        [{"text": usr.getstr('sign_in_button'), "url": oauth.get_url()}]
+                    ]}
+                )
+        })
         return
 
     if cb.query == 'sign_in':
-        bot.api.call("answerCallbackQuery",
-                     {'callback_query_id': cb.id, 'url': 'telegram.me/your_bot?start=XXXX'})
+        bot.api.call("answerCallbackQuery", {
+            'callback_query_id': cb.id, 'url': 'telegram.me/your_bot?start=XXXX'
+        })
 
     if not usr.exists:
         text = (
             "<b>Welcome!</b>"
             "\nFirst, <b>select your language</b>:"
         )
-        bot.api.call('editMessageText',
-                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': text, 'parse_mode': 'HTML',
-                      'reply_markup': '{"inline_keyboard": ['
-                                      '[{"text": "🇮🇹 Italian", "callback_data": "l@it"},'
-                                      '{"text": "🇬🇧 English", "callback_data": "l@en"}]]}'
-                      })
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': text,
+            'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": "🇮🇹 Italian", "callback_data": "l@it"},
+                         {"text": "🇬🇧 English", "callback_data": "l@en"}]
+                    ]}
+                )
+        })
 
     if cb.query == 'home':
-        bot.api.call('editMessageText',
-                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': usr.getstr('start'), 'parse_mode': 'HTML',
-                      'reply_markup': '{"inline_keyboard": '
-                                      '[[{"text": "' + usr.getstr('news_button') + '", "callback_data": "news"},'
-                                                                                   '{"text": "' + usr.getstr(
-                          'trends_button') + '", "callback_data": "trends"},'
-                                             '{"text": "' + usr.getstr(
-                          'calendar_button') + '", "callback_data": "calendar"}],'
-                                               '[{"text": "' + usr.getstr(
-                          'settings_button') + '", "callback_data": "settings"}]]}'
-                      })
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': usr.getstr('start'),
+            'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {"inline_keyboard": [
+                        [{"text": usr.getstr('news_button'), "callback_data": "news"},
+                         {"text": usr.getstr('trends_button'), "callback_data": "trends"},
+                         {"text": usr.getstr('calendar_button'), "callback_data": "calendar"}],
+                        [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
+                    ]}
+                )
+        })
 
     elif cb.query == 'settings':
-        bot.api.call('editMessageText',
-                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': usr.getstr('settings'), 'parse_mode': 'HTML',
-                      'reply_markup': '{"inline_keyboard": '
-                                      '[[{"text": "' + usr.getstr('setlan_button') + '", "callback_data": "setlan"}]]}'
-                      })
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': usr.getstr('settings'),
+            'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {'inline_keyboard': [
+                        [{"text": usr.getstr('setlang_button'), "callback_data": "setlang"}],
+                        [{"text": usr.getstr('back_button'), "callback_data": "home"}]
+                    ]}
+                )
+        })
 
-    elif cb.query == 'setlan':
-        bot.api.call('editMessageText',
-                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': usr.getstr('setlan'), 'parse_mode': 'HTML',
-                      'reply_markup': '{"inline_keyboard": ['
-                                      '[{"text": "🇮🇹 Italian", "callback_data": "l@it"},'
-                                      '{"text": "🇬🇧 English", "callback_data": "l@en"}]]}'
-                      })
+    elif cb.query == 'setlang':
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': usr.getstr('setlang'),
+            'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {'inline_keyboard': [
+                        [{"text": "🇮🇹 Italian", "callback_data": "l@it"},
+                         {"text": "🇬🇧 English", "callback_data": "l@en"}]
+                    ]}
+                )
+        })
 
     elif cb.query == 'trends':
         usr.state(new_state='trends1')
-        bot.api.call('editMessageText',
-                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': usr.getstr('trends'), 'parse_mode': 'HTML',
-                      'reply_markup': '{"inline_keyboard": ['
-                                      '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
-                      })
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': usr.getstr('trends'),
+            'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {'inline_keyboard': [
+                        [{"text": usr.getstr('back_button'), "callback_data": "home"}]
+                    ]}
+                )
+        })
 
     elif cb.query == 'calendar':
         text, inline_keyboard = calendar.getevents(usr, [None, 3])
-        bot.api.call('editMessageText',
-                     {'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
-                      'text': text, 'parse_mode': 'HTML', 'disable_web_page_preview': True,
-                      'reply_markup': inline_keyboard
-                      })
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': text,
+            'parse_mode': 'HTML', 'disable_web_page_preview': True, 'reply_markup': inline_keyboard
+        })
 
     news.process_callback(bot, cb, usr)
     calendar.process_callback(bot, cb, usr)
@@ -152,10 +168,13 @@ def start(chat, message, args):
         text = calendar.formatevent(usr, event_id)
         bot.api.call('sendMessage', {
             'chat_id': chat.id, 'text': text, 'parse_mode': 'HTML', 'reply_markup':
-                '{"inline_keyboard":'
-                '[[{"text": "' + usr.getstr('edit_event_button') + '", "callback_data": "cd@edit@' + event_id + '"},'
-                '{"text": "' + usr.getstr('delete_event_button') + '", "callback_data": "cd@delete@' + event_id + '"}],'
-                '[{"text": "' + usr.getstr('back_button') + '", "callback_data": "home"}]]}'
+                json.dumps(
+                    {'inline_keyboard': [
+                        [{"text": usr.getstr('edit_event_button'), "callback_data": "cd@edit@" + event_id},
+                         {"text": usr.getstr('delete_event_button'), "callback_data": "cd@delete@" + event_id}],
+                        [{"text": usr.getstr('back_button'), "callback_data": "home"}]
+                    ]}
+                )
         })
         return True
 
@@ -164,12 +183,16 @@ def start(chat, message, args):
             "<b>Welcome!</b>"
             "\nFirst, <b>select your language</b>:"
         )
-        bot.api.call('sendMessage',
-                     {'chat_id': chat.id, 'text': text, 'parse_mode': 'HTML',
-                      'reply_markup': '{"inline_keyboard": ['
-                                      '[{"text": "🇮🇹 Italian", "callback_data": "l@it"},'
-                                      '{"text": "🇬🇧 English", "callback_data": "l@en"}]]}'
-                      })
+        bot.api.call('editMessageText', {
+            'chat_id': chat.id, 'text': text,
+            'parse_mode': 'HTML', 'reply_markup':
+                json.dumps(
+                    {'inline_keyboard': [
+                        [{"text": "🇮🇹 Italian", "callback_data": "l@it"},
+                         {"text": "🇬🇧 English", "callback_data": "l@en"}]
+                    ]}
+                )
+        })
         return
 
     if not usr.timezone():
@@ -178,15 +201,15 @@ def start(chat, message, args):
         return
 
     bot.api.call('sendMessage', {
-        'chat_id': chat.id,
-        'text': usr.getstr('start'), 'parse_mode': 'HTML',
-        'reply_markup': '{"inline_keyboard": '
-                        '[[{"text": "' + usr.getstr('news_button') + '", "callback_data": "news"},'
-                                                                     '{"text": "' + usr.getstr(
-            'trends_button') + '", "callback_data": "trends"},'
-                               '{"text": "' + usr.getstr('calendar_button') + '", "callback_data": "calendar"}],'
-                                                                              '[{"text": "' + usr.getstr(
-            'settings_button') + '", "callback_data": "settings"}]]}'
+        'chat_id': chat.id, 'text': usr.getstr('start'), 'parse_mode': 'HTML', 'reply_markup':
+            json.dumps(
+                {"inline_keyboard": [
+                    [{"text": usr.getstr('news_button'), "callback_data": "news"},
+                     {"text": usr.getstr('trends_button'), "callback_data": "trends"},
+                     {"text": usr.getstr('calendar_button'), "callback_data": "calendar"}],
+                    [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
+                ]}
+            )
     })
 
 

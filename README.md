@@ -14,7 +14,7 @@ Currently implemented features, services and APIs:
 
 ## Credits and license
 Developer of this project is [Marco Aceti](https://telegram.me/MarcoBuster).
-All code and translations are relased under [MIT License](https://raw.githubusercontent.com/MarcoBuster/GoogleBot/blob/master/LICENSE).
+All code and translations are relased under [MIT License](https://github.com/MarcoBuster/GoogleBot/blob/master/LICENSE).
 
 This software is relased "as is", without warranty of any kind.
 

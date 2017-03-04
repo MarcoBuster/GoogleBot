@@ -60,7 +60,7 @@ def process_callback(bot, chains, update):
                     {'inline_keyboard': [
                         [{"text": usr.getstr('sign_in_button'), "url": oauth.get_url()}]
                     ]}
-                )
+            )
         })
         return
 
@@ -96,7 +96,7 @@ def process_callback(bot, chains, update):
                          {"text": usr.getstr('calendar_button'), "callback_data": "calendar"}],
                         [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
                     ]}
-                )
+            )
         })
 
     elif cb.query == 'settings':
@@ -108,7 +108,7 @@ def process_callback(bot, chains, update):
                         [{"text": usr.getstr('setlang_button'), "callback_data": "setlang"}],
                         [{"text": usr.getstr('back_button'), "callback_data": "home"}]
                     ]}
-                )
+            )
         })
 
     elif cb.query == 'setlang':
@@ -120,7 +120,7 @@ def process_callback(bot, chains, update):
                         [{"text": "🇮🇹 Italian", "callback_data": "l@it"},
                          {"text": "🇬🇧 English", "callback_data": "l@en"}]
                     ]}
-                )
+            )
         })
 
     elif cb.query == 'trends':
@@ -132,7 +132,7 @@ def process_callback(bot, chains, update):
                     {'inline_keyboard': [
                         [{"text": usr.getstr('back_button'), "callback_data": "home"}]
                     ]}
-                )
+            )
         })
 
     elif cb.query == 'calendar':
@@ -209,7 +209,7 @@ def start(chat, message, args):
                      {"text": usr.getstr('calendar_button'), "callback_data": "calendar"}],
                     [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
                 ]}
-            )
+        )
     })
 
 

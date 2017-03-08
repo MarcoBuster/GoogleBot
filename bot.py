@@ -78,9 +78,10 @@ def process_callback(bot, chains, update):
             'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': text,
             'parse_mode': 'HTML', 'reply_markup':
                 json.dumps(
-                    {"inline_keyboard": [
+                    {'inline_keyboard': [
                         [{"text": "🇮🇹 Italian", "callback_data": "l@it"},
-                         {"text": "🇬🇧 English", "callback_data": "l@en"}]
+                         {"text": "🇬🇧 English", "callback_data": "l@en"},
+                         {"text": "🇪🇸 Spanish", "callback_data": "l@es"}]
                     ]}
                 )
         })
@@ -119,9 +120,10 @@ def process_callback(bot, chains, update):
                 json.dumps(
                     {'inline_keyboard': [
                         [{"text": "🇮🇹 Italian", "callback_data": "l@it"},
-                         {"text": "🇬🇧 English", "callback_data": "l@en"}]
+                         {"text": "🇬🇧 English", "callback_data": "l@en"},
+                         {"text": "🇪🇸 Spanish", "callback_data": "l@es"}]
                     ]}
-            )
+                )
         })
 
     elif cb.query == 'trends':
@@ -195,13 +197,14 @@ def start(chat, message, args):
             "<b>Welcome!</b>"
             "\nFirst, <b>select your language</b>:"
         )
-        bot.api.call('editMessageText', {
+        bot.api.call('sendMessage', {
             'chat_id': chat.id, 'text': text,
             'parse_mode': 'HTML', 'reply_markup':
                 json.dumps(
                     {'inline_keyboard': [
                         [{"text": "🇮🇹 Italian", "callback_data": "l@it"},
-                         {"text": "🇬🇧 English", "callback_data": "l@en"}]
+                         {"text": "🇬🇧 English", "callback_data": "l@en"},
+                         {"text": "🇪🇸 Spanish", "callback_data": "l@es"}]
                     ]}
                 )
         })

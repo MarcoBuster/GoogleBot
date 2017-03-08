@@ -1,5 +1,5 @@
 import sqlite3
-from languages import it, en
+from languages import it, en, es
 import os
 from oauth2client.file import Storage
 
@@ -87,6 +87,8 @@ class User:
             return it.get(str_code)
         if lang == 'en':
             return en.get(str_code)
+        if lang == 'es':
+            return es.get(str_code)
 
     @property
     def logged_in(self):

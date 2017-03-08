@@ -123,7 +123,7 @@ def process_callback(bot, chains, update):
                          {"text": "🇬🇧 English", "callback_data": "l@en"},
                          {"text": "🇪🇸 Spanish", "callback_data": "l@es"}]
                     ]}
-                )
+            )
         })
 
     elif cb.query == 'trends':

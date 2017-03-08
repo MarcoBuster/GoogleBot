@@ -28,17 +28,16 @@ def getfiles(user, pagetoken=None, parent=None):
     if not items:
         # TODO: Custom error message for each folder
 
-        return user.getstr('drive_list_no_files'), \
-               json.dumps(
-                   {"inline_keyboard": [[{"text": user.getstr('back_button'), "callback_data": "home"}]]}
-               )
+        return (user.getstr('drive_list_no_files'),
+                json.dumps({'inline_keyboard': [[{'text': user.getstr('back_button'), 'callback_data': 'home'}]]}
+                           ))
 
     text = user.getstr('drive_list_header')  # TODO: Custom header for each folder
     reply_markup = {"inline_keyboard": [[{"foo": "bar"}]]}
     for item in items:  # TODO: Better listing design
         if item.get('mimeType') == 'application/vnd.google-apps.folder':
             reply_markup["inline_keyboard"] += [[{"text": '➡️ 📂' + item.get('name'),
-                                                "callback_data": "drv@fldr@" + item.get('id')}]]
+                                                  "callback_data": "drv@fldr@" + item.get('id')}]]
             text += '\n📂 <b>{name}</b>'.format(name=item.get('name'))
         else:
             text += '\n📃 <b>{name}</b>'.format(name=item.get('name'))

@@ -5,7 +5,7 @@ import botogram
 
 from config import *
 from objects import callback, user, message_update
-from plugins import news, trends, calendar
+from plugins import news, trends, calendar, drive
 
 from oauth import oauth
 
@@ -94,7 +94,8 @@ def process_callback(bot, chains, update):
                         [{"text": usr.getstr('news_button'), "callback_data": "news"},
                          {"text": usr.getstr('trends_button'), "callback_data": "trends"},
                          {"text": usr.getstr('calendar_button'), "callback_data": "calendar"}],
-                        [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
+                        [{"text": usr.getstr('drive_button'), "callback_data": "drive"}],
+                        [{"text": usr.getstr('settings_button'), "callback_data": "settings"}],
                     ]}
             )
         })
@@ -142,8 +143,16 @@ def process_callback(bot, chains, update):
             'parse_mode': 'HTML', 'disable_web_page_preview': True, 'reply_markup': inline_keyboard
         })
 
+    elif cb.query == 'drive':
+        text, inline_keyboard = drive.getfiles(user=usr, pagetoken=None, parent='root')
+        bot.api.call('editMessageText', {
+            'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': text,
+            'parse_mode': 'HTML', 'disable_web_page_preview': True, 'reply_markup': inline_keyboard
+        })
+
     news.process_callback(bot, cb, usr)
     calendar.process_callback(bot, cb, usr)
+    drive.process_callback(bot, cb, usr)
 
 
 bot.register_update_processor("callback_query", process_callback)
@@ -210,6 +219,7 @@ def start(chat, message, args):
                     [{"text": usr.getstr('news_button'), "callback_data": "news"},
                      {"text": usr.getstr('trends_button'), "callback_data": "trends"},
                      {"text": usr.getstr('calendar_button'), "callback_data": "calendar"}],
+                    [{"text": usr.getstr('drive_button'), "callback_data": "drive"}],
                     [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
                 ]}
         )

@@ -81,7 +81,7 @@ STRINGS = [
         'deleted_event': '🗑 <b>Il tuo evento è stato eliminato con successo</b>',
         # -- Drive plugins strings --
         # List
-        'drive_list_header': '📂 <b>I tuoi files</b>',
+        'drive_list_header': '📑 <b>I tuoi files</b>',
         'drive_list_no_files': '❌ <b>Nessun file trovato nel tuo account Google Drive</b>',
         # -- Buttons --
         # Controls
@@ -91,7 +91,9 @@ STRINGS = [
         'add_event_button': '➕ Aggiungi un evento',
         'edit_event_button': '✍️ Modifica',
         'delete_event_button': '🗑 Elimina',
-        'update_event_same': '🙈 Lascia così'
+        'update_event_same': '🙈 Lascia così',
+        # Drive
+        'drive_button': '📑 Drive'
     }
 ]
 

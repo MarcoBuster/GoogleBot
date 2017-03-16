@@ -1,4 +1,3 @@
-googleapiclient
 botogram
 beautifulsoup4
 feedparser
@@ -9,3 +8,4 @@ oauth2client
 google-api-python-client
 googlemaps
 pytz
+google-api-python-client

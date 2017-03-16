@@ -77,8 +77,8 @@ def getfile(user, file_id):
 
 
 def download(user, file, msg):
-    def startdownload(request):
-        downloader = MediaIoBaseDownload(fh, request)
+    def startdownload(_request):
+        downloader = MediaIoBaseDownload(fh, _request)
         done = False
         while not done:
             status, done = downloader.next_chunk()
@@ -95,11 +95,12 @@ def download(user, file, msg):
     try:
         request = service.files().get_media(fileId=file.get('id'))
         startdownload(request)
+        return '/tmp/' + file.get('name')
     except:
         request = service.files().export_media(fileId=file.get('id'), mimeType='application/pdf')
         startdownload(request)
-
-    return '/tmp/' + file.get('name')
+        os.rename('/tmp/' + file.get('name'), '/tmp/' + file.get('name') + '.pdf')
+        return '/tmp/' + file.get('name') + '.pdf'
 
 
 def process_callback(bot, cb, user):

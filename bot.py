@@ -200,10 +200,27 @@ def start(chat, message, args):
             file = args.lstrip('drv-file').rstrip('-download')
 
             msg = chat.send(usr.getstr('drive_downloading_progress').format(p=0))
-            filename = drive.download(usr, drive.getfile(usr, file), msg)
+            try:
+                filename = drive.download(usr, drive.getfile(usr, file), msg)
+            except:
+                msg.edit('Unable to download the file.')
+                return
+
             msg.edit(usr.getstr('drive_downloading_uploading'))
 
-            message.reply_with_file(filename)
+            if os.path.getsize(filename) > 50000000:
+                msg.edit('File is too big for be sent.')
+                return
+
+            if filename.endswith('.png') or filename.endswith('.jpg'):
+                message.reply_with_photo(filename)
+            elif filename.endswith('.mp3'):
+                message.reply_with_audio(filename)
+            elif filename.endswith('.ogg'):
+                message.reply_with_voice(filename)
+            else:
+                message.reply_with_file(filename)
+
             msg.edit(usr.getstr('drive_downloading_done'))
             os.remove(filename)
             return

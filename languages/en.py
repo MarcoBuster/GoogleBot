@@ -88,6 +88,8 @@ STRINGS = [
         'drive_download_allfolder': 'download all files in this screen',  # Must be lowercase
         'drive_downloading_progress': 'Downloading your file... ({p}%)',
         'drive_downloading_uploading': 'Uploading your file in Telegram...',
+        'drive_downloading_generic_error': 'Unable to download the file.',
+        'drive_downloading_too_big': 'The file is too big for be sent in Telegram.',
         'drive_downloading_done': 'Done!',
         # -- Buttons --
         # Controls

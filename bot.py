@@ -286,4 +286,4 @@ def process_message(message, chat):
     calendar.process_message(update)
 
 if __name__ == '__main__':
-    bot.run(workers=100)
+    bot.run(workers=10)

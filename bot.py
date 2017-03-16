@@ -14,6 +14,7 @@ from config import GOOGLE_API_KEY
 
 import json
 
+import os
 import subprocess
 subprocess.Popen(['python3', 'callback_handler.py'])
 
@@ -38,6 +39,7 @@ class CallbackQuery(botogram.objects.base.BaseObject):
 botogram.Update.optional["callback_query"] = CallbackQuery
 
 bot = botogram.create(TOKEN)
+bot.process_backlog = True
 
 conn = sqlite3.connect('users.sqlite')
 c = conn.cursor()
@@ -192,6 +194,20 @@ def start(chat, message, args):
         })
         return True
 
+    if 'drv-file-' in ''.join(args):
+        if '-download' in ''.join(args):
+            args = ''.join(args)
+            file = args.lstrip('drv-file').rstrip('-download')
+
+            msg = chat.send(usr.getstr('drive_downloading_progress').format(p=0))
+            filename = drive.download(usr, drive.getfile(usr, file), msg)
+            msg.edit(usr.getstr('drive_downloading_uploading'))
+
+            message.reply_with_file(filename)
+            msg.edit(usr.getstr('drive_downloading_done'))
+            os.remove(filename)
+            return
+
     if not usr.exists:
         text = (
             "<b>Welcome!</b>"
@@ -253,4 +269,4 @@ def process_message(message, chat):
     calendar.process_message(update)
 
 if __name__ == '__main__':
-    bot.run()
+    bot.run(workers=100)

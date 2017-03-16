@@ -81,6 +81,12 @@ STRINGS = [
         # List
         'drive_list_header': '📂 <b>Tu file</b>',
         'drive_list_no_files': '❌ <b>Nadie file en tu Google Drive account</b>',
+        # Download
+        'drive_download': 'download',  # Must be lowercase
+        'drive_download_allfolder': 'download all files in this screen',  # Must be lowercase
+        'drive_downloading_progress': 'Downloading your file... ({p}%)',
+        'drive_downloading_uploading': 'Uploading your file in Telegram...',
+        'drive_downloading_done': 'Done!',
         # -- Buttons --
         # Controls
         'first_page': '⏪ Primera pagina',

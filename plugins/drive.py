@@ -46,9 +46,8 @@ def getfiles(user, pagetoken=None, parent=None):
             text += '\n📂 <b>{name}</b>'.format(name=item.get('name'))
         else:
             url = 'https://t.me/CompleteGoogleBot?start=drv-file-' + item.get('id') + '-download'
-            text += '\n📃 <b>{name}</b> (<a href="{url}">{dw}</a>)'.format(
-                                                                            name=item.get('name'), url=url,
-                                                                            dw=user.getstr('drive_download'))
+            text += '\n📃 <b>{name}</b> (<a href="{url}">{dw}</a>)'\
+                .format(name=item.get('name'), url=url, dw=user.getstr('drive_download'))
 
     del reply_markup["inline_keyboard"][0]
 

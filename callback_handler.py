@@ -13,7 +13,10 @@ c = conn.cursor()
 
 @app.route('/google_oauth')
 def google_oauth():
-    code = str(request.args['code'])
+    if request.args.get('error'):
+        return '<h1>Fatal error</h1>\n<a href="https://telegram.me/CompleteGoogleBot">Retry</a>'
+
+    code = str(request.args.get('code'))
     short_code = ''.join(
         random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
     c.execute('INSERT INTO cache_oauth_codes VALUES(?, ?, ?)', (code, short_code, datetime.now()))

@@ -1,5 +1,28 @@
+"""
+Copyright (c) 2017 Marco Aceti <dev@marcoaceti.it>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+
 from apiclient import discovery
-from apiclient.http import MediaIoBaseDownload
+from apiclient.http import MediaIoBaseDownload, MediaFileUpload
 import os
 import io
 import httplib2
@@ -101,6 +124,18 @@ def download(user, file, msg):
         startdownload(request)
         os.rename('/tmp/' + file.get('name'), '/tmp/' + file.get('name') + '.pdf')
         return '/tmp/' + file.get('name') + '.pdf'
+
+
+def upload(user, path, name):
+    service = login(user)
+    media = MediaFileUpload(path, mimetype='image/png', resumable=True)
+    request = service.files().insert(media_body=media, body={'name': name})
+    uploaded = False
+    while not uploaded:
+        status, response = request.next_chunk()
+        if status:
+            print("Uploaded %d%%." % int(status.progress() * 100))
+    print("Upload Complete!")
 
 
 def process_callback(bot, cb, user):

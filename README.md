@@ -10,6 +10,7 @@ Currently implemented features, services and APIs:
 * **Google News**, get news from your country.
 * **Google Trends**, look for a topic and watch Google Trends graph.
 * **Google Calendar**, view, create, edit and delete events from your [Google Calendar](https://calendar.google.com).
+* **Google Drive**, browse and download files from the best online cloud storage: [Google Drive](https://drive.google.com)!
 * And much more to come!
 
 ## Credits and license
@@ -21,5 +22,8 @@ This software is relased "as is", without warranty of any kind.
 ### Translators
 * **Italian translation**: [Marco Aceti](https://telegram.me/MarcoBuster)
 * **English translation**: [Marco Aceti](https://telegram.me/MarcoBuster) and [Pietro Arado](https://telegram.me/ProfOak)
+* **Spanish translation**: [Alessandro Casnigo](https://www.github.com/casungo/)
+
+... Thanks!
 
 **Copyright © Marco Aceti 2017.**

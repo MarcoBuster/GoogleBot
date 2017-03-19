@@ -114,6 +114,9 @@ STRINGS = [
         'drive_downloading_generic_error': 'Unable to download the file.',
         'drive_downloading_too_big': 'The file is too big for be sent in Telegram.',
         'drive_downloading_done': 'Done!',
+        # Upload
+        'drive_uploading_progress': 'Uploading your file... ({p}%)',
+        'drive_uploading_done': 'Done!',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',

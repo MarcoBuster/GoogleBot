@@ -618,7 +618,8 @@ def getfiles(user, pagetoken=None, parent=None):
     service = login(user)
     results = service.files().list(
         pageSize=10, orderBy='folder', pageToken=pagetoken,
-        q='"{parent}" in parents and not trashed'.format(parent=parent) if parent is not None else '').execute()
+        q='"{parent}" in parents and not trashed'.format(parent=parent) if parent is not None else 'not trashed')\
+        .execute()
     items = results.get('files', [])
 
     if not items:
@@ -655,7 +656,12 @@ def getfiles(user, pagetoken=None, parent=None):
             [[{"text": user.getstr('next_page'), "callback_data": "drv@fldr@" + parent + "@page@" + short_token}]]
 
     reply_markup["inline_keyboard"] += \
-        [[{"text": user.getstr('back_button'), "callback_data": "drive" if parent != 'root' else "home"}]]
+        [
+            [{"text": user.getstr('drive_upload_button'),
+              "callback_data": "drv@fldr@" + 'root' if parent is None else parent}],
+            [{"text": user.getstr('back_button'),
+              "callback_data": "drive" if parent != 'root' else "home"}]
+        ]
 
     # TODO: Go to upper folder by pressing back button
 

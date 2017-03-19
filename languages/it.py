@@ -115,6 +115,7 @@ STRINGS = [
         'drive_downloading_too_big': 'Il file che stai provando a scaricare è troppo grande.',
         'drive_downloading_done': 'Fatto!',
         # Upload
+        'drive_upload_button': '➕ Carica un file qui',
         'drive_uploading_progress': 'Sto caricando il tuo file... ({p}%)',
         'drive_uploading_done': 'Fatto!',
         # -- Buttons --

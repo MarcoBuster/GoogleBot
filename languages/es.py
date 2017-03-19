@@ -113,7 +113,11 @@ STRINGS = [
         'drive_downloading_too_big': 'The file is too big for be sent in Telegram.',
         'drive_downloading_done': 'Done!',
         # Upload
+        'drive_upload': '<b>Send a file and it\'ll uploaded in this folder!</b>',
         'drive_upload_button': '➕ Carica un file qui',
+        'drive_upload_no_file': '❌ <b>This is not a file.</b>'
+                                '\nIf you are trying to send a photo, a video, a song, ..., <b>send it as a file</b>',
+        'drive_upload_ask_name': '📝 <b>Come vuoi chiamare il file</b>?',
         'drive_uploading_progress': 'Uploading your file... ({p}%)',
         'drive_uploading_done': 'Done!',
         # -- Buttons --

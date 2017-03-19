@@ -20,7 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-
 from apiclient import discovery
 from apiclient.http import MediaIoBaseDownload, MediaFileUpload
 import os
@@ -618,7 +617,7 @@ def getfiles(user, pagetoken=None, parent=None):
     service = login(user)
     results = service.files().list(
         pageSize=10, orderBy='folder', pageToken=pagetoken,
-        q='"{parent}" in parents and not trashed'.format(parent=parent) if parent is not None else 'not trashed')\
+        q='"{parent}" in parents and not trashed'.format(parent=parent) if parent is not None else 'not trashed') \
         .execute()
     items = results.get('files', [])
 
@@ -638,7 +637,7 @@ def getfiles(user, pagetoken=None, parent=None):
             text += '\n📂 <b>{name}</b>'.format(name=item.get('name'))
         else:
             url = 'https://t.me/CompleteGoogleBot?start=drv-file-' + item.get('id') + '-download'
-            text += '\n📃 <b>{name}</b> (<a href="{url}">{dw}</a>)'\
+            text += '\n📃 <b>{name}</b> (<a href="{url}">{dw}</a>)' \
                 .format(name=item.get('name'), url=url, dw=user.getstr('drive_download'))
 
     del reply_markup["inline_keyboard"][0]
@@ -658,7 +657,7 @@ def getfiles(user, pagetoken=None, parent=None):
     reply_markup["inline_keyboard"] += \
         [
             [{"text": user.getstr('drive_upload_button'),
-              "callback_data": "drv@fldr@" + 'root' if parent is None else parent}],
+              "callback_data": "drv@fldr@" + ('root' if parent is None else parent) + '@upld'}],
             [{"text": user.getstr('back_button'),
               "callback_data": "drive" if parent != 'root' else "home"}]
         ]
@@ -700,29 +699,43 @@ def download(user, file, msg):
         return '/tmp/' + file.get('name') + '.pdf'
 
 
-def upload(user, path, name, msg):
+def upload(user, path, name, folder, msg):
     service = login(user)
 
     mimetype = MIME_TYPES.get('.' + path.split('.')[-1], 'text/plain')
     media = MediaFileUpload(path, mimetype=mimetype, resumable=True)
-    request = service.files().insert(media_body=media, body={'name': name})
+    request = service.files().create(media_body=media, body={'name': name})
 
     uploaded = False
     while not uploaded:
-        status, response = request.next_chunk()
-        try:
-            msg.edit(user.getstr('drive_uploading_progress')
-                     .format(p=int(status.progress() * 100)))
-        except botogram.api.APIError:
-            pass
+        status, uploaded = request.next_chunk()
+        if uploaded:
+            break
+        msg.edit(user.getstr('drive_uploading_progress').format(p=int(status.progress() * 100)))
 
-    msg.edit(user.getstr('drive_uploading_done'))
+    msg.edit(user.getstr('drive_uploading_done'))  # TODO: Move in correct folder
     os.remove(path)
 
 
 def process_callback(bot, cb, user):
     if 'drv@' in cb.query:
         if 'drv@fldr@' in cb.query:
+            if '@upld' in cb.query:
+                folder = cb.query.split('@')[2]
+
+                bot.api.call('editMessageText', {
+                    'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': user.getstr('drive_upload'),
+                    'parse_mode': 'HTML', 'disable_web_page_preview': True, 'reply_markup':
+                        json.dumps(
+                            {"inline_keyboard": [
+                                [{"text": user.getstr('back_button'), "callback_data": "drv@fldr@" + folder}]
+                            ]}
+                        )
+                })
+
+                user.state('drive_upload_' + folder)
+                return
+
             if '@page' in cb.query:
                 parent = cb.query.split('@')[2]
                 short_token = cb.query.split('@')[4]
@@ -740,8 +753,32 @@ def process_callback(bot, cb, user):
                 })
                 return
 
-            text, inline_keyboard = getfiles(user, pagetoken=None, parent=cb.query.lstrip('drv@fldr@'))
+            text, inline_keyboard = getfiles(user, pagetoken=None, parent=cb.query.split('@')[2])
             bot.api.call('editMessageText', {
                 'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': text,
                 'parse_mode': 'HTML', 'disable_web_page_preview': True, 'reply_markup': inline_keyboard
             })
+
+
+def process_message(update):
+    message = update.message
+    user = update.user
+
+    if user.state().startswith('drive_upload_'):
+        if len(user.state().split('_')) >= 4:
+            if message.text:
+                folder = user.state().split('_')[2]
+                file_id = '_'.join(user.state().split('_')[3:])
+                path = '/tmp/' + file_id
+
+                msg = message.reply(user.getstr('drive_uploading_progress').format(p=0))
+                upload(user, path, message.text, folder, msg)
+                return True
+
+        if message.document is None:
+            message.reply(user.getstr('drive_upload_no_file'))
+            return True
+
+        message.reply(user.getstr('drive_upload_ask_name'))
+        message.document.save('/tmp/' + message.document.file_id + '.' + message.document.file_name.split('.')[-1])
+        user.state(user.state() + '_' + message.document.file_id + '.' + message.document.file_name.split('.')[-1])

@@ -307,6 +307,7 @@ def process_message(message, chat):
     update = message_update.MessageUpdate(usr, bot, chat, message)
     trends.process_message(update)
     calendar.process_message(update)
+    drive.process_message(update)
 
 if __name__ == '__main__':
     bot.run(workers=10)

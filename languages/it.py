@@ -115,7 +115,11 @@ STRINGS = [
         'drive_downloading_too_big': 'Il file che stai provando a scaricare è troppo grande.',
         'drive_downloading_done': 'Fatto!',
         # Upload
+        'drive_upload': '<b>Invia un file e sarà caricato in questa cartella</b>',
         'drive_upload_button': '➕ Carica un file qui',
+        'drive_upload_no_file': '❌ <b>Quello che hai inviato non è un file.</b>'
+                                '\nSe stai inviando una foto, un video, una canzone, ..., <b>invialo come file</b>',
+        'drive_upload_ask_name': '📝 <b>Come vuoi chiamare il file</b>?',
         'drive_uploading_progress': 'Sto caricando il tuo file... ({p}%)',
         'drive_uploading_done': 'Fatto!',
         # -- Buttons --

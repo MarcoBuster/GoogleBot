@@ -1,4 +1,4 @@
-# Telegram Google Bot [![Build Status](https://travis-ci.org/MarcoBuster/GoogleBot.svg?branch=master)](https://travis-ci.org/MarcoBuster/GoogleBot)
+# Telegram Google Bot [![Build Status](https://travis-ci.org/MarcoBuster/GoogleBot.svg?branch=master)](https://travis-ci.org/MarcoBuster/GoogleBot) ![Lines of code](https://git.marcoaceti.it/MarcoBuster/GoogleBot)
 ## Introduction
 [Telegram](https://telegram.org) is a messaging application that allows you to use [bots](https://core.telegram.org/bots), developed using [Telegram Bot APIs](https://core.telegram.org/bots/api).
 Google Bot will be a Telegram Bot for [Google](https://developers.google.com) Services & APIs. 

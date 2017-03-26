@@ -704,7 +704,7 @@ def upload(user, path, name, folder, msg):
 
     mimetype = MIME_TYPES.get('.' + path.split('.')[-1], 'text/plain')
     media = MediaFileUpload(path, mimetype=mimetype, resumable=True)
-    request = service.files().create(media_body=media, body={'name': name})
+    request = service.files().create(media_body=media, body={'name': name, 'parents': [folder]})
 
     uploaded = False
     while not uploaded:

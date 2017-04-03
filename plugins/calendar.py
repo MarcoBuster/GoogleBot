@@ -223,7 +223,7 @@ def process_callback(bot, cb, user):
                         {"inline_keyboard": [
                             [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                         ]}
-                    )
+                )
             })
             user.state('calendar_create_event_1')
 
@@ -247,7 +247,7 @@ def process_callback(bot, cb, user):
                                     [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
                                     [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                                 ]}
-                            )
+                        )
                     })
                     user.state('calendar_update_event_2')
                 else:
@@ -290,7 +290,7 @@ def process_callback(bot, cb, user):
                             [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
                             [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                         ]}
-                    )
+                )
             })
             user.state('calendar_update_event_1')
             event_id = cb.query.replace('cd@edit@', '')
@@ -312,7 +312,7 @@ def process_callback(bot, cb, user):
                     {"inline_keyboard": [
                         [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                     ]}
-                )
+            )
         })
 
 
@@ -331,7 +331,7 @@ def process_message(update):
                         {"inline_keyboard": [
                             [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                         ]}
-                    )
+                )
             })
 
     if user.state() == 'calendar_create_event_1':
@@ -356,7 +356,7 @@ def process_message(update):
                     {"inline_keyboard": [
                         [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                     ]}
-                )
+            )
         })
 
     elif user.state() == 'calendar_create_event_2':
@@ -370,7 +370,7 @@ def process_message(update):
                             {"inline_keyboard": [
                                 [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                             ]}
-                        )
+                    )
                 })
 
         try:
@@ -389,7 +389,7 @@ def process_message(update):
                         {"inline_keyboard": [
                             [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                         ]}
-                    )
+                )
             })
             return
         except ValueError:
@@ -401,7 +401,7 @@ def process_message(update):
                         {"inline_keyboard": [
                             [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                         ]}
-                    )
+                )
             })
             return
 
@@ -464,7 +464,7 @@ def process_message(update):
                         [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
                         [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                     ]}
-                )
+            )
         })
 
     elif user.state() == 'calendar_update_event_2':
@@ -479,7 +479,7 @@ def process_message(update):
                                 [{"text": user.getstr('update_event_same'), "callback_data": "cd@edit@same"}],
                                 [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                             ]}
-                        )
+                    )
                 })
 
         try:
@@ -498,7 +498,7 @@ def process_message(update):
                         {"inline_keyboard": [
                             [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                         ]}
-                    )
+                )
             })
             return
         except ValueError:
@@ -510,7 +510,7 @@ def process_message(update):
                         {"inline_keyboard": [
                             [{"text": user.getstr('back_button'), "callback_data": "calendar"}]
                         ]}
-                    )
+                )
             })
             return
 

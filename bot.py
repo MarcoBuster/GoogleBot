@@ -261,7 +261,7 @@ def start(chat, message, args):
                               "callback_data": "drv@file@" + file + "@delete"},
                              {"text": usr.getstr('back_button'), "callback_data": "drive"}]
                         ]}
-                    )
+                )
             })
             return
 
@@ -298,7 +298,7 @@ def start(chat, message, args):
                     [{"text": usr.getstr('drive_button'), "callback_data": "drive"}],
                     [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
                 ]}
-            )
+        )
     })
 
 

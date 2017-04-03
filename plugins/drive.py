@@ -784,7 +784,7 @@ def process_callback(bot, cb, user):
                             [{"text": user.getstr('back_button'), "callback_data": "drive"}]
                         ]}
                     )
-            })
+                })
 
 
 def process_message(update):

@@ -122,6 +122,10 @@ STRINGS = [
         'drive_upload_ask_name': '📝 <b>Come vuoi chiamare il file</b>?',
         'drive_uploading_progress': 'Uploading your file... ({p}%)',
         'drive_uploading_done': 'Done!',
+        # Delete
+        'drive_delete': 'delete',  # Must be lowercase
+        'drive_delete_confirm': '🗑 You really want to delete the file?',
+        'drive_delete_done': 'File deleted',
         # -- Buttons --
         # Controls
         'first_page': '⏪ First page',
@@ -132,7 +136,8 @@ STRINGS = [
         'delete_event_button': '🗑 Delete',
         'update_event_same': '🙈 Keep like this',
         # Drive
-        'drive_button': '📑 Drive'
+        'drive_button': '📑 Drive',
+        'drive_delete_button': '🗑 Delete'
     }
 ]
 

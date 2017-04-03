@@ -20,6 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from config import *
+
 from apiclient import discovery
 from apiclient.http import MediaIoBaseDownload, MediaFileUpload
 import os
@@ -636,9 +638,12 @@ def getfiles(user, pagetoken=None, parent=None):
                                                   "callback_data": "drv@fldr@" + item.get('id')}]]
             text += '\n📂 <b>{name}</b>'.format(name=item.get('name'))
         else:
-            url = 'https://t.me/CompleteGoogleBot?start=drv-file-' + item.get('id') + '-download'
-            text += '\n📃 <b>{name}</b> (<a href="{url}">{dw}</a>)' \
-                .format(name=item.get('name'), url=url, dw=user.getstr('drive_download'))
+            url_dw = 'https://t.me/{u}?start=drv-file-{i}-download'.format(u=BOT_USERNAME, i=item.get('id'))
+            url_dlt = 'https://t.me/{u}?start=drv-file-{i}-delete'.format(u=BOT_USERNAME, i=item.get('id'))
+
+            text += '\n📃 <b>{name}</b> (<a href="{url_dw}">{dw}</a>, <a href="{url_dlt}">{dlt}</a>)' \
+                .format(name=item.get('name'), url_dw=url_dw, dw=user.getstr('drive_download'),
+                        url_dlt=url_dlt, dlt=user.getstr('drive_delete'))
 
     del reply_markup["inline_keyboard"][0]
 
@@ -717,6 +722,12 @@ def upload(user, path, name, folder, msg):
     os.remove(path)
 
 
+def delete(user, file_id):
+    service = login(user)
+
+    service.files().delete(fileId=file_id)
+
+
 def process_callback(bot, cb, user):
     if 'drv@' in cb.query:
         if 'drv@fldr@' in cb.query:
@@ -757,6 +768,22 @@ def process_callback(bot, cb, user):
             bot.api.call('editMessageText', {
                 'chat_id': cb.chat.id, 'message_id': cb.message.message_id, 'text': text,
                 'parse_mode': 'HTML', 'disable_web_page_preview': True, 'reply_markup': inline_keyboard
+            })
+
+        if 'drv@file' in cb.query:
+            if '@delete' in cb.query:
+                query = cb.query
+                file = query.split('@')[2]
+                delete(user, file)
+
+                bot.api.call('editMessageText', {
+                    'chat_id': cb.chat.id, 'message_id': cb.message.message_id,
+                    'text': user.getstr('drive_delete_done'), 'parse_mode': 'HTML', 'reply_markup':
+                    json.dumps(
+                        {"inline_keyboard": [
+                            [{"text": user.getstr('back_button'), "callback_data": "drive"}]
+                        ]}
+                    )
             })
 
 

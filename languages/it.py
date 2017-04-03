@@ -108,7 +108,6 @@ STRINGS = [
         'drive_list_no_files': '❌ <b>Nessun file trovato nel tuo account Google Drive</b>',
         # Download
         'drive_download': 'scarica',  # Must be lowercase
-        'drive_download_allfolder': 'scarica tutti questi files',  # Must be lowercase
         'drive_downloading_progress': 'Sto scaricando il tuo file... ({p}%)',
         'drive_downloading_uploading': 'Sto caricando il file su Telegram...',
         'drive_downloading_generic_error': 'Impossibile scaricare il file.',
@@ -122,6 +121,10 @@ STRINGS = [
         'drive_upload_ask_name': '📝 <b>Come vuoi chiamare il file</b>?',
         'drive_uploading_progress': 'Sto caricando il tuo file... ({p}%)',
         'drive_uploading_done': 'Fatto!',
+        # Delete
+        'drive_delete': 'elimina',  # Must be lowercase
+        'drive_delete_confirm': '🗑 Vuoi davvero eliminare definitivamente il file?',
+        'drive_delete_done': 'File eliminato',
         # -- Buttons --
         # Controls
         'first_page': '⏪ Prima pagina',
@@ -132,7 +135,8 @@ STRINGS = [
         'delete_event_button': '🗑 Elimina',
         'update_event_same': '🙈 Lascia così',
         # Drive
-        'drive_button': '📑 Drive'
+        'drive_button': '📑 Drive',
+        'drive_delete_button': '🗑 Cancella'
     }
 ]
 

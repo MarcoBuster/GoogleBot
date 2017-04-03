@@ -21,6 +21,8 @@ SOFTWARE.
 """
 
 
+from config import *
+
 import sqlite3
 from datetime import datetime
 import random
@@ -37,7 +39,7 @@ c = conn.cursor()
 @app.route('/google_oauth')
 def google_oauth():
     if request.args.get('error'):
-        return '<h1>Fatal error</h1>\n<a href="https://telegram.me/CompleteGoogleBot">Retry</a>'
+        return '<h1>Fatal error</h1>\n<a href="https://telegram.me/{u}">Retry</a>'.format(u=BOT_USERNAME)
 
     code = str(request.args.get('code'))
     short_code = ''.join(
@@ -45,7 +47,7 @@ def google_oauth():
     c.execute('INSERT INTO cache_oauth_codes VALUES(?, ?, ?)', (code, short_code, datetime.now()))
     conn.commit()
 
-    return redirect('https://telegram.me/CompleteGoogleBot?start=oauth-' + short_code)
+    return redirect('https://telegram.me/{u}?start=oauth-{sc}'.format(u=BOT_USERNAME, sc=short_code))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=False, port=4999)

@@ -21,16 +21,17 @@ SOFTWARE.
 """
 
 
-TOKEN = ''
+TOKEN = ''  # Bot token from t.me/BotFather
+BOT_USERNAME = ''  # Without "@"
 
-GOOGLE_USERNAME = ''
-GOOGLE_PASSWORD = ''
+GOOGLE_USERNAME = ''  # Google account username for pytrends module
+GOOGLE_PASSWORD = ''  # Google account password for pytrends module
 
-PLOTLY_USERNAME = ''
-PLOTLY_API_KEY = ''
+PLOTLY_USERNAME = ''  # Plot.ly username for graphs
+PLOTLY_API_KEY = ''  # Plot.ly api key for graphs
 
-GOOGLE_OAUTH_CLIENT_ID = ''
-GOOGLE_OAUTH_CLIENT_SECRET = ''
-GOOGLE_OAUTH_REDIRECT_URI = ''
+GOOGLE_OAUTH_CLIENT_ID = ''  # Google OAuth Client ID for Google OAuth 2 API
+GOOGLE_OAUTH_CLIENT_SECRET = ''  # Google OAuth Client Secret for Google OAuth 2 API
+GOOGLE_OAUTH_REDIRECT_URI = ''  # Google OAuth Redirect URI for Google OAuth 2 API
 
-GOOGLE_API_KEY = ''
+GOOGLE_API_KEY = ''  # Google API key for Google APIs

@@ -248,6 +248,23 @@ def start(chat, message, args):
             os.remove(filename)
             return
 
+        if '-delete' in ''.join(args):
+            args = ''.join(args)
+            file = args.lstrip('drv-file').rstrip('-delete')
+
+            bot.api.call('sendMessage', {
+                'chat_id': chat.id, 'text': usr.getstr('drive_delete_confirm'),
+                'parse_mode': 'HTML', 'reply_markup':
+                    json.dumps(
+                        {"inline_keyboard": [
+                            [{"text": usr.getstr('drive_delete_button'),
+                              "callback_data": "drv@file@" + file + "@delete"},
+                             {"text": usr.getstr('back_button'), "callback_data": "drive"}]
+                        ]}
+                    )
+            })
+            return
+
     if not usr.exists:
         text = (
             "<b>Welcome!</b>"
@@ -281,7 +298,7 @@ def start(chat, message, args):
                     [{"text": usr.getstr('drive_button'), "callback_data": "drive"}],
                     [{"text": usr.getstr('settings_button'), "callback_data": "settings"}]
                 ]}
-        )
+            )
     })
 
 

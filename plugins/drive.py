@@ -664,7 +664,7 @@ def getfiles(user, pagetoken=None, parent=None):
               "callback_data": "drv@fldr@" + ('root' if parent is None else parent) + '@upld'}],
             [{"text": user.getstr('back_button'),
               "callback_data": "drive" if parent != 'root' else "home"}]
-        ]
+    ]
 
     # TODO: Go to upper folder by pressing back button
 
@@ -740,7 +740,7 @@ def process_callback(bot, cb, user):
                             {"inline_keyboard": [
                                 [{"text": user.getstr('back_button'), "callback_data": "drv@fldr@" + folder}]
                             ]}
-                        )
+                    )
                 })
 
                 user.state('drive_upload_' + folder)
@@ -782,7 +782,7 @@ def process_callback(bot, cb, user):
                             {"inline_keyboard": [
                                 [{"text": user.getstr('back_button'), "callback_data": "drive"}]
                             ]}
-                        )
+                    )
                 })
 
 

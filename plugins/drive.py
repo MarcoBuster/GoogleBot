@@ -1,4 +1,4 @@
-# Copyright (c) 2017 Marco Aceti <dev@marcoaceti.it>
+# Copyright (c) 2017 The TelegramGoogleBot Authors (see AUTHORS)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -40,12 +40,7 @@ conn = sqlite3.connect('users.sqlite')
 c = conn.cursor()
 
 MIME_TYPES = {
-
-    # Special thanks to http://stackoverflow.com/a/33534156/6083563
-    # From https://github.com/google/google-drive-proxy/blob/master/DriveProxy/API/MimeType.cs
-    # LICENSE: https://github.com/google/google-drive-proxy/blob/master/LICENSE
-    # Copyright 2014 Google Inc
-
+    # Special thanks to https://stackoverflow.com/a/33534156/6083563
     ".323": "text/h323",
     ".3g2": "video/3gpp2",
     ".3gp": "video/3gpp",
